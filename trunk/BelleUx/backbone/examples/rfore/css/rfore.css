@@ -1,0 +1,78 @@
+
+div.footer-container {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 15px;
+    padding-bottom: 48px;
+    color: #C0C0C0;
+}
+
+div.footer-container div.footer-text-view {
+    font-size: 8pt;
+}
+
+.bar {
+    fill: steelblue;
+}
+
+.bar:hover {
+    fill: brown;
+}
+
+.axis {
+    font: 12px sans-serif;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.x.axis path {
+}
+
+
+.line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}
+
+.dot {
+    stroke: #000;
+}
+
+.area {
+    fill: steelblue;
+}
+
+.d3-tip {
+    line-height: 1;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 2px;
+    line-height: 12pt;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+    box-sizing: border-box;
+    display: inline;
+    font-size: 10px;
+    width: 100%;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.8);
+    content: "\25BC";
+    position: absolute;
+    text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 0;
+}

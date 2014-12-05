@@ -1,0 +1,135 @@
+[{
+        "guid": 1,
+        "name": "3-d-acoustic"
+    },
+
+    {
+        "guid": 2,
+        "name": "915-mhz-wind-profiling-radar"
+    },
+
+    {
+        "guid": 3,
+        "name": "acoustic-doppler-profiler"
+    },
+
+    {
+        "guid": 4,
+        "name": "barometric-pressure"
+    },
+
+    {
+        "guid": 5,
+        "name": "bat-detector"
+    },
+
+    {
+        "guid": 6,
+        "name": "bird-bat-radar"
+    },
+
+    {
+        "guid": 7,
+        "name": "ceilometer"
+    },
+
+    {
+        "guid": 8,
+        "name": "class-1-cup-anemometers-and-vanes"
+    },
+
+    {
+        "guid": 9,
+        "name": "ct-profile"
+    },
+
+    {
+        "guid": 10,
+        "name": "doppler-lidar"
+    },
+
+    {
+        "guid": 11,
+        "name": "echolocation-system"
+    },
+
+    {
+        "guid": 12,
+        "name": "fast-response-h20-vapor"
+    },
+
+    {
+        "guid": 13,
+        "name": "ir-camera-in-air"
+    },
+
+    {
+        "guid": 14,
+        "name": "ir-video-camera-bw"
+    },
+
+    {
+        "guid": 15,
+        "name": "magnetometer"
+    },
+
+    {
+        "guid": 16,
+        "name": "mast-mean-t-humidity"
+    },
+
+    {
+        "guid": 17,
+        "name": "organism-detection"
+    },
+
+    {
+        "guid": 18,
+        "name": "precipitation"
+    },
+
+    {
+        "guid": 19,
+        "name": "sea-snake"
+    },
+
+    {
+        "guid": 20,
+        "name": "sea-surface-temp"
+    },
+
+    {
+        "guid": 21,
+        "name": "sodar-wind-profiler"
+    },
+
+    {
+        "guid": 22,
+        "name": "sonic-anemometers"
+    },
+
+    {
+        "guid": 23,
+        "name": "subsurface-video"
+    },
+
+    {
+        "guid": 24,
+        "name": "t-rh-profiles"
+    },
+
+    {
+        "guid": 25,
+        "name": "video-camera-in-air"
+    },
+
+    {
+        "guid": 26,
+        "name": "whale-detection"
+    },
+
+    {
+        "guid": 27,
+        "name": "wind-vanes"
+    }
+]

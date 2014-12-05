@@ -1,0 +1,1 @@
+config :rfore_bootstrap, :required => [:sproutcore]

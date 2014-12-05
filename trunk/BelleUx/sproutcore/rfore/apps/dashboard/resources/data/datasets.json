@@ -1,0 +1,60 @@
+[{
+        "guid": 1,
+        "dataPoint": "ingest_save/sgpmetE13/201405/23/20140523230700-rfore-sgpmetE13.raw-logger_temp.nc",
+        "name": "Dataset "
+    },
+
+    {
+        "guid": 2,
+        "dataPoint": "ingest_save/sgpmetE13/201405/23/20140523230700-rfore-sgpmetE13.raw-atmos_pressure.nc",
+        "name": "Dataset "
+    },
+
+    {
+        "guid": 3,
+        "dataPoint": "ingest_save/sgpmetE13/201405/23/20140523230700-rfore-sgpmetE13.raw-rh_std.nc",
+        "name": "Dataset "
+    },
+
+    {
+        "guid": 4,
+        "dataPoint": "ingest_save/sgpmetE13/201405/23/20140523230700-rfore-sgpmetE13.raw-rh_mean.nc",
+        "name": "Dataset "
+    },
+
+    {
+        "guid": 5,
+        "dataPoint": "ingest_save/sgpmetE13/201405/23/20140523230700-rfore-sgpmetE13.raw-logger_volt.nc",
+        "name": "Dataset "
+    },
+
+    {
+        "guid": 1,
+        "dataPoint": "ingest_save/sgpmetE13/201405/23/20140523230700-rfore-sgpmetE13.raw-temp_mean.nc",
+        "name": "Dataset "
+    },
+
+    {
+        "guid": 2,
+        "dataPoint": "ingest_save/sgpmetE13/201405/23/20140523230700-rfore-sgpmetE13.raw-wdir_vec_mean.nc",
+        "name": "Dataset "
+    },
+
+    {
+        "guid": 3,
+        "dataPoint": "ingest_save/sgpmetE13/201405/23/20140523230700-rfore-sgpmetE13.raw-pwd_cumul_rain.nc",
+        "name": "Dataset "
+    },
+
+    {
+        "guid": 4,
+        "dataPoint": "ingest_save/sgpmetE13/201405/23/20140523230700-rfore-sgpmetE13.raw-wspd_vec_mean.nc",
+        "name": "Dataset "
+    },
+
+    {
+        "guid": 5,
+        "dataPoint": "ingest_save/sgpmetE13/201405/23/20140523230700-rfore-sgpmetE13.raw-wdir_vec_std.nc",
+        "name": "Dataset "
+    }
+]

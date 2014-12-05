@@ -1,0 +1,114 @@
+<html>
+    <head>
+        <title>RFORE Backbone Prototype</title>
+        
+        <script>
+            var RforeD3 = new Object();
+            var RforeResources = new Object();
+            RforeResources.DATA_URL_BASE = "http://localhost/~smit062/rfore-data/";
+        </script>
+
+        <link rel="stylesheet" type="text/css" href="../../test/vendor/bootstrap-3.2.0-dist/css/bootstrap.min.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="../../test/vendor/bootstrap-3.2.0-dist/css/bootstrap-theme.min.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="css/rfore.css" media="screen">
+    </head>
+    <body>
+        <section id="main">
+        <div id="sc940" class="dashboard" style="bottom: 0px; right: 0px; left: 0px; top: 0px; min-width: 200px; min-height: 200px; ">
+            <div id="sc941"  style="right: 0px; left: 0px; top: 0px; height: 550px; background-color: #FFF; ">
+                <div id="sc942"  style="bottom: 0px; right: 0px; left: 0px; top: 0px; ">
+                    <div id="sc943"  style="bottom: 0px; right: 0px; left: 0px; top: 0px; ">
+                        <div class="navbar navbar-default navbar-fixed-top">
+                            <div class="container">
+                                <div class="navbar-header">
+                                    <a href="/home" class="navbar-brand">RFORE</a>
+                                </div>
+                                <div class="navbar-collapse collapse">
+                                    <ul class="nav navbar-nav">
+                                        <li class="active">
+                                        <a href="#" id="dashboard">Dashboard</a>
+                                        </li>
+                                        <li>
+                                        <a href="/search" id="search">Search</a>
+                                        </li>
+                                        <li class="dropdown">
+                                        <a href="#" data-toggle="dropdown" class="dropdown-toggle dropdown-tools">Chart Types<b class="caret"></b></a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                            <a href="javascript:void(0);" onclick="$(document).trigger('regen', 'scatterplot');" id="scatter">Scatter</a>
+                                            </li>
+                                            <li>
+                                            <a href="javascript:void(0);" onclick="$(document).trigger('regen', 'areaplot');" id="area">Area</a>
+                                            </li>
+                                            <li>
+                                            <a href="javascript:void(0);" onclick="$(document).trigger('regen', 'lineplot');" id="line">Line</a>
+                                            </li>
+                                            <li>
+                                            <a href="javascript:void(0);" onclick="$(document).trigger('regen', 'bubbleplot');" id="bubble">Bubble</a>
+                                            </li>
+                                        </ul>
+                                        </li>
+                                        <li>
+                                        <a href="javascript:void(0);" id="data">Data</a>
+                                        </li>
+                                    </ul>
+                                    <ul class="nav navbar-nav navbar-right">
+                                        <li class="dropdown">
+                                        <a href="#" data-toggle="dropdown" class="dropdown-toggle dropdown-account">Username...<b class="caret"></b></a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                            <a href="#profile" id="profile">Profile</a>
+                                            </li>
+                                        </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="body" style="width:100%;height:550px;position:relative;margin-top:55px;">
+                        <div class="menu" style="width:200px;position:absolute;margin-left:5px;">Menu</div>
+                        <div class="chart" style="margin-left:250px;">
+                            <hr size=1>
+                            <div id="embed-d3" class="container" style="width: 700px; height: 400px; "></div>
+                        </div>
+                    </div>
+
+                    <div id="sc1009"  style="bottom: 0px; right: 0px; left: 0px; top: 551px; background-color: #eee; height:150px;">
+                        <div id="sc1010"  style="bottom: 0px; right: 0px; left: 0px; top: 0px; ">
+                            <div class="footer-container">
+                                <div class="footer-text-view">
+                                    U.S. Department of Energy (DOE) *  Office of Energy Efficiency &amp; Renewable Energy (EERE)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                </section>
+
+                <script src="../../test/vendor/json2.js"></script>
+                <script src="../../test/vendor/jquery.js"></script>
+                <script src="../../test/vendor/underscore.js"></script>
+                <script src="../../backbone.js"></script>
+                <script src="../backbone.localStorage.js"></script>
+                <script src="../../test/vendor/bootstrap-3.2.0-dist/js/bootstrap.min.js"></script>
+                <script src="../../test/vendor/d3.v3.min.js"></script>
+                <!-- <script src="js/d3/init.js"></script> 
+                <script src="js/init.js"></script> -->
+
+                <!-- TEST -->
+                <script src="js/d3/lib/data_functions.js"></script>
+                <script src="js/d3/chart_model.js"></script>
+                <script src="js/d3/area_plot_model.js"></script>
+                <script src="js/d3/bar_plot_model.js"></script>
+                <script src="js/d3/bubble_plot_model.js"></script>
+                <script src="js/d3/line_plot_model.js"></script>
+                <script src="js/d3/scatter_plot_model.js"></script>
+                <script src="js/d3/generator_model.js"></script>
+                <script src="js/dataset_model.js"></script>
+                <script src="js/init.js"></script>
+                
+            </body>
+        </html>

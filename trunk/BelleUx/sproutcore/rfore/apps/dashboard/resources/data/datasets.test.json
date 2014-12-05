@@ -1,0 +1,60 @@
+[{
+        "guid": 1,
+        "dataPoint": "atmos_pressure",
+        "name": "Dataset "
+    },
+
+    {
+        "guid": 2,
+        "dataPoint": "cumul_rain",
+        "name": "Dataset "
+    },
+
+    {
+        "guid": 3,
+        "dataPoint": "logger_temp",
+        "name": "Dataset "
+    },
+
+    {
+        "guid": 4,
+        "dataPoint": "logger_volt",
+        "name": "Dataset "
+    },
+
+    {
+        "guid": 5,
+        "dataPoint": "rh_mean",
+        "name": "Dataset "
+    },
+
+    {
+        "guid": 1,
+        "dataPoint": "rh_std",
+        "name": "Dataset "
+    },
+
+    {
+        "guid": 2,
+        "dataPoint": "temp_mean",
+        "name": "Dataset "
+    },
+
+    {
+        "guid": 3,
+        "dataPoint": "wdir_vec_mean",
+        "name": "Dataset "
+    },
+
+    {
+        "guid": 4,
+        "dataPoint": "wspd_vec_mean",
+        "name": "Dataset "
+    },
+
+    {
+        "guid": 5,
+        "dataPoint": "1",
+        "name": "Dataset "
+    }
+]

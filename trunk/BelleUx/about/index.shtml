@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<!--#include virtual="/include/meta.inc"-->
+
+<title>RFORE</title>
+
+<!--#include virtual="/include/css.inc"-->
+
+</head>
+
+<body>
+    
+<!--#include virtual="/include/head.inc"-->
+    
+<div class="container">
+    <h1>About</h1>
+</div>
+    
+<!--#include virtual="/include/foot.inc"-->
+<!--#include virtual="/include/js.inc"-->
+
+</body>
+
+</html>

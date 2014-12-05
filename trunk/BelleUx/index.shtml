@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<!--#include virtual="/include/meta.inc"-->
+
+<title>RFORE</title>
+
+<!--#include virtual="/include/css.inc"-->
+
+</head>
+
+<body>
+
+<!--#include virtual="/include/head.inc"-->
+    
+<div class="jumbotron">
+    <div class="container">
+        <div class="col-lg-12">
+            <p id="home-title">
+                <strong>R</strong>eference
+                <strong>F</strong>acility for
+                <strong>O</strong>ffshore
+                <strong>R</strong>enewable
+                <strong>E</strong>nergy
+            </p>
+            <div id="home-banner"></div>
+
+        </div>
+    </div>
+</div>
+    
+<!--#include virtual="/include/foot.inc"-->
+<!--#include virtual="/include/js.inc"-->
+
+</body>
+
+</html>
