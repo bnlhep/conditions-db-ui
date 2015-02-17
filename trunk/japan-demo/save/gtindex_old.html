@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Backbone Cellar</title>
+<link rel="stylesheet" href="../css/styles.css" />
+</head>
+
+<body>
+
+<div id="header">
+    <span class="title">Belle 2 Conditions DB</span>
+</div>
+
+<div id="sidebar"></div>
+
+<div id="content">
+<h2>Welcome to the Belle 2 Conditions DB</h2>
+<p>
+This is a sample application to test interacting with global tags.
+</p>
+</div>
+
+<!-- Templates -->
+<script type="text/template" id="tpl-header">
+	<button class="new">New Global Tag</button>
+</script>
+
+<script type="text/template" id="tpl-gt-list-item">
+	<a href='#gts/<%= id %>'><%= name %></a>
+</script>
+
+<script type="text/template" id="tpl-gt-details">
+
+    <div class="form-left-col">
+        <label>Global Tag:</label>
+        <input type="text" id="gtId" name="id" value="<%= id %>" disabled />
+        <label>Type:</label>
+        <select class="dropdown" name="dropdown">
+                <option value="developer">Developer</option>
+                <option value="debug">Debug</option>
+        </select>
+        <label>Name:</label>
+        <input type="text" id="name" name="name" value="<%= name %>" required/> 
+        <label>Description:</label>
+        <textarea id="description" name="description"><%= description %></textarea> 
+        <button class="save">Save</button>
+    </div>
+
+</script>
+
+<!-- JavaScript -->
+<script src="../lib/jquery-1.7.1.min.js"></script>
+<script src="../lib/underscore-min.js"></script>
+<script src="../lib/backbone-min.js"></script>
+<script src="js/gtmain.js"></script>   
+
+</body>
+</html>

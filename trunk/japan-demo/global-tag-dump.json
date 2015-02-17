@@ -1,0 +1,255 @@
+
+
+    [
+       {
+           "globalTagId": 1,
+           "description": "desc",
+           "dtmIns": "2015-01-28T14:15:17.395674-08:00",
+           "dtmMod": "2015-01-28T14:15:17.395674-08:00",
+           "isDefault": true,
+           "modifiedBy": "adm_cond",
+           "name": "TEST_GT1",
+           "globalTagStatus":
+           {
+               "globalTagStatusId": 1,
+               "description": "Valid global tag",
+               "dtmIns": "2015-01-28T14:15:17.385796-08:00",
+               "dtmMod": "2015-01-28T14:15:17.385796-08:00",
+               "name": "VALID"
+           },
+           "globalTagType":
+           {
+               "globalTagTypeId": 1,
+               "description": "Development global tag",
+               "dtmIns": "2015-01-28T14:15:17.390663-08:00",
+               "dtmMod": "2015-01-28T14:15:17.390663-08:00",
+               "name": "DEV"
+           }
+       },
+       {
+           "globalTagId": 2,
+           "description": "desc",
+           "dtmIns": "2015-01-28T14:15:17.399906-08:00",
+           "dtmMod": "2015-01-28T14:15:17.399906-08:00",
+           "isDefault": true,
+           "modifiedBy": "adm_cond",
+           "name": "TEST_GT2",
+           "globalTagStatus":
+           {
+               "globalTagStatusId": 1,
+               "description": "Valid global tag",
+               "dtmIns": "2015-01-28T14:15:17.385796-08:00",
+               "dtmMod": "2015-01-28T14:15:17.385796-08:00",
+               "name": "VALID"
+           },
+           "globalTagType":
+           {
+               "globalTagTypeId": 2,
+               "description": "Released global tag",
+               "dtmIns": "2015-01-28T14:15:17.392746-08:00",
+               "dtmMod": "2015-01-28T14:15:17.392746-08:00",
+               "name": "RELEASE"
+           }
+       },
+       {
+           "globalTagId": 3,
+           "description": "desc",
+           "dtmIns": "2015-01-28T14:15:17.401467-08:00",
+           "dtmMod": "2015-01-28T14:15:17.401467-08:00",
+           "isDefault": true,
+           "modifiedBy": "adm_cond",
+           "name": "TEST_GT3",
+           "globalTagStatus":
+           {
+               "globalTagStatusId": 2,
+               "description": "Valid global tag",
+               "dtmIns": "2015-01-28T14:15:17.387708-08:00",
+               "dtmMod": "2015-01-28T14:15:17.387708-08:00",
+               "name": "INVALID"
+           },
+           "globalTagType":
+           {
+               "globalTagTypeId": 1,
+               "description": "Development global tag",
+               "dtmIns": "2015-01-28T14:15:17.390663-08:00",
+               "dtmMod": "2015-01-28T14:15:17.390663-08:00",
+               "name": "DEV"
+           }
+       },
+       {
+           "globalTagId": 4,
+           "description": "desc",
+           "dtmIns": "2015-01-28T14:15:17.40276-08:00",
+           "dtmMod": "2015-01-28T14:15:17.40276-08:00",
+           "isDefault": true,
+           "modifiedBy": "adm_cond",
+           "name": "TEST_GT4",
+           "globalTagStatus":
+           {
+               "globalTagStatusId": 2,
+               "description": "Valid global tag",
+               "dtmIns": "2015-01-28T14:15:17.387708-08:00",
+               "dtmMod": "2015-01-28T14:15:17.387708-08:00",
+               "name": "INVALID"
+           },
+           "globalTagType":
+           {
+               "globalTagTypeId": 2,
+               "description": "Released global tag",
+               "dtmIns": "2015-01-28T14:15:17.392746-08:00",
+               "dtmMod": "2015-01-28T14:15:17.392746-08:00",
+               "name": "RELEASE"
+           }
+       },
+       {
+           "globalTagId": 5,
+           "description": "desc",
+           "dtmIns": "2015-01-28T14:15:17.404029-08:00",
+           "dtmMod": "2015-01-28T14:15:17.404029-08:00",
+           "isDefault": true,
+           "modifiedBy": "adm_cond",
+           "name": "TEST_GT5",
+           "globalTagStatus":
+           {
+               "globalTagStatusId": 1,
+               "description": "Valid global tag",
+               "dtmIns": "2015-01-28T14:15:17.385796-08:00",
+               "dtmMod": "2015-01-28T14:15:17.385796-08:00",
+               "name": "VALID"
+           },
+           "globalTagType":
+           {
+               "globalTagTypeId": 1,
+               "description": "Development global tag",
+               "dtmIns": "2015-01-28T14:15:17.390663-08:00",
+               "dtmMod": "2015-01-28T14:15:17.390663-08:00",
+               "name": "DEV"
+           }
+       },
+       {
+           "globalTagId": 6,
+           "description": "desc",
+           "dtmIns": "2015-01-28T14:15:17.405469-08:00",
+           "dtmMod": "2015-01-28T14:15:17.405469-08:00",
+           "isDefault": true,
+           "modifiedBy": "adm_cond",
+           "name": "TEST_GT6",
+           "globalTagStatus":
+           {
+               "globalTagStatusId": 1,
+               "description": "Valid global tag",
+               "dtmIns": "2015-01-28T14:15:17.385796-08:00",
+               "dtmMod": "2015-01-28T14:15:17.385796-08:00",
+               "name": "VALID"
+           },
+           "globalTagType":
+           {
+               "globalTagTypeId": 1,
+               "description": "Development global tag",
+               "dtmIns": "2015-01-28T14:15:17.390663-08:00",
+               "dtmMod": "2015-01-28T14:15:17.390663-08:00",
+               "name": "DEV"
+           }
+       },
+       {
+           "globalTagId": 7,
+           "description": "desc",
+           "dtmIns": "2015-01-28T14:15:17.40677-08:00",
+           "dtmMod": "2015-01-28T14:15:17.40677-08:00",
+           "isDefault": true,
+           "modifiedBy": "adm_cond",
+           "name": "TEST_GT7",
+           "globalTagStatus":
+           {
+               "globalTagStatusId": 1,
+               "description": "Valid global tag",
+               "dtmIns": "2015-01-28T14:15:17.385796-08:00",
+               "dtmMod": "2015-01-28T14:15:17.385796-08:00",
+               "name": "VALID"
+           },
+           "globalTagType":
+           {
+               "globalTagTypeId": 2,
+               "description": "Released global tag",
+               "dtmIns": "2015-01-28T14:15:17.392746-08:00",
+               "dtmMod": "2015-01-28T14:15:17.392746-08:00",
+               "name": "RELEASE"
+           }
+       },
+       {
+           "globalTagId": 8,
+           "description": "desc",
+           "dtmIns": "2015-01-28T14:15:17.409027-08:00",
+           "dtmMod": "2015-01-28T14:15:17.409027-08:00",
+           "isDefault": true,
+           "modifiedBy": "adm_cond",
+           "name": "TEST_GT8",
+           "globalTagStatus":
+           {
+               "globalTagStatusId": 2,
+               "description": "Valid global tag",
+               "dtmIns": "2015-01-28T14:15:17.387708-08:00",
+               "dtmMod": "2015-01-28T14:15:17.387708-08:00",
+               "name": "INVALID"
+           },
+           "globalTagType":
+           {
+               "globalTagTypeId": 1,
+               "description": "Development global tag",
+               "dtmIns": "2015-01-28T14:15:17.390663-08:00",
+               "dtmMod": "2015-01-28T14:15:17.390663-08:00",
+               "name": "DEV"
+           }
+       },
+       {
+           "globalTagId": 9,
+           "description": "desc",
+           "dtmIns": "2015-01-28T14:15:17.410836-08:00",
+           "dtmMod": "2015-01-28T14:15:17.410836-08:00",
+           "isDefault": true,
+           "modifiedBy": "adm_cond",
+           "name": "TEST_GT9",
+           "globalTagStatus":
+           {
+               "globalTagStatusId": 2,
+               "description": "Valid global tag",
+               "dtmIns": "2015-01-28T14:15:17.387708-08:00",
+               "dtmMod": "2015-01-28T14:15:17.387708-08:00",
+               "name": "INVALID"
+           },
+           "globalTagType":
+           {
+               "globalTagTypeId": 2,
+               "description": "Released global tag",
+               "dtmIns": "2015-01-28T14:15:17.392746-08:00",
+               "dtmMod": "2015-01-28T14:15:17.392746-08:00",
+               "name": "RELEASE"
+           }
+       },
+       {
+           "globalTagId": 10,
+           "description": "desc",
+           "dtmIns": "2015-01-28T14:15:17.411922-08:00",
+           "dtmMod": "2015-01-28T14:15:17.411922-08:00",
+           "isDefault": true,
+           "modifiedBy": "adm_cond",
+           "name": "TEST_GT10",
+           "globalTagStatus":
+           {
+               "globalTagStatusId": 1,
+               "description": "Valid global tag",
+               "dtmIns": "2015-01-28T14:15:17.385796-08:00",
+               "dtmMod": "2015-01-28T14:15:17.385796-08:00",
+               "name": "VALID"
+           },
+           "globalTagType":
+           {
+               "globalTagTypeId": 1,
+               "description": "Development global tag",
+               "dtmIns": "2015-01-28T14:15:17.390663-08:00",
+               "dtmMod": "2015-01-28T14:15:17.390663-08:00",
+               "name": "DEV"
+           }
+       }
+    ]
+
