@@ -1,0 +1,37 @@
+
+// Models
+window.GlobalTag = Backbone.Model.extend({
+    url:'http://windy.pnnl.gov:8080/b2s/rest/v1/globalTags',
+    defaults:{
+           "globalTagId": 1,
+           "description": "desc",
+           "dtmIns": "2015-01-28T14:15:17.395674-08:00",
+           "dtmMod": "2015-01-28T14:15:17.395674-08:00",
+           "isDefault": true,
+           "modifiedBy": "adm_cond",
+           "name": "TEST_GT1",
+           "globalTagStatus":
+           {
+               "globalTagStatusId": 1,
+               "description": "Valid global tag",
+               "dtmIns": "2015-01-28T14:15:17.385796-08:00",
+               "dtmMod": "2015-01-28T14:15:17.385796-08:00",
+               "name": "VALID"
+           },
+           "globalTagType":
+           {
+               "globalTagTypeId": 1,
+               "description": "Development global tag",
+               "dtmIns": "2015-01-28T14:15:17.390663-08:00",
+               "dtmMod": "2015-01-28T14:15:17.390663-08:00",
+               "name": "DEV"
+           }
+    }
+});
+
+window.GlobalTagCollection = Backbone.Collection.extend({
+    model:GlobalTag ,
+    url:'http://windy.pnnl.gov:8080/b2s/rest/v1/globalTags'
+});
+
+
