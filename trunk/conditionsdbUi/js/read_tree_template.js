@@ -7,8 +7,6 @@ var treeStringBegin;
 var treeStringClose;
 var treeData = new Object();
 
-
-
 //
 // Initialize everything at startup
 //
@@ -16,8 +14,221 @@ tree = $("div:tree").data("ui-fancytree");
 uxTree  = [{"view":"global_tag","title":"Global Tag"},
              {"view":"payload","title":"Payloads"}]
 treeStringBegin = '[{"title": "<strong>' + uxTree[treeIndex].title + '</strong>", "expanded": true, "folder": true, "children": [ ';
-treeStringClose =' 	]} ]';
+treeStringClose ='      ]} ]';
 treeString = "";
+
+//
+// Payload tree global variables
+//
+var payloadsForGlobalTag;
+payloadsForGlobalTag = new Object();
+
+//
+//
+//
+
+//
+// Payload Tree functions
+//
+
+//
+//
+//
+
+
+function payloadsAssignedToGlobalTag(id) {
+  var results;
+  results = new Object();
+  results  = $.parseJSON(
+  $.ajax(
+        {
+           url: server + "/globalTag/" + id + "/payloads",
+           async: false,
+           dataType: 'json'
+        }
+       ).responseText
+  );
+  payloadsForGlobalTag = results;
+
+}
+
+function isPayloadAssignedToGlobalTag(id) {
+  var results;
+  results = false;
+  for (var p=0; p < payloadsForGlobalTag.length; p++) {
+      if (id == payloadsForGlobalTag[p].payloadId) {
+         results = true;
+         break;
+      }
+  }
+  return results;
+}
+
+function getAllPayloadNames() {
+   var results;
+   var buildId;
+   var buildSortKey;
+   var payloadList = new Object();
+   var buildString = "[";
+
+   payloadsAssignedToGlobalTag(1);
+
+   payloadList = $.parseJSON(
+    $.ajax(
+        {
+           url: server + "/payloads",
+           async: false,
+           dataType: 'json'
+        }
+       ).responseText
+    );
+   for (var i = 0; i < payloadList.length; i++) {
+      buildId = payloadList[i].basf2Module.basf2Package.name
+                + '...'
+                + payloadList[i].basf2Module.name
+                + '...'
+                + payloadList[i].revision ;
+      buildSortKey =  payloadList[i].basf2Module.basf2Package.name
+                + '...'
+                + payloadList[i].basf2Module.name ;
+      buildString = buildString
+                + '{"recordId": "'
+                + buildId
+                + '","sortKey": "'
+                + buildSortKey
+                + '","packageName": "'
+                + payloadList[i].basf2Module.basf2Package.name
+                + '","moduleName": "'
+                + payloadList[i].basf2Module.name
+                + '","payloadRev": "'
+                + payloadList[i].revision
+                + '","payloadId": "'
+                + payloadList[i].payloadId
+                + '","hasGlobalTag":' +  isPayloadAssignedToGlobalTag(payloadList[i].payloadId)
+                + ' }';
+      if (i < (payloadList.length-1)) {
+        buildString = buildString + ',';
+      }
+
+   }
+   buildString = buildString + ']'
+   results = buildString;
+   console.log(buildString);
+   return results;
+
+}
+
+function getPayloadTreeData (globaltagId) {
+
+   var payloadTable = new Object();
+   var prevPackage;
+   var prevModule;
+   var currPackage;
+   var currModule;
+   var addedParentTag;
+   var packageIndex;
+   var moduleIndex;
+   
+   var mytree = new Array();
+   mytreeEntry = {"title": "<strong>" + uxTree[1].title + "</strong>", 
+                    "expanded": true, 
+                    "folder": true,
+                    "children": new Array()};
+    mytree.push(mytreeEntry);
+
+   addedParentTag = false;
+   treeString = treeStringBegin;
+
+
+   payloadTable = JSON.parse(getAllPayloadNames());
+   payloadTable.sort(function(a, b) {
+    var textA;
+    var textB;
+    textA = a.sortKey.toLowerCase();
+    textB = b.sortKey.toLowerCase();
+    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+});
+   prevPackage = "";
+   prevModule = "";
+   packageIndex = 0;
+   moduleIndex = 0;
+   console.log(prevPackage);
+   console.log("\t"+ prevModule);
+   for (var i = 0; i < payloadTable.length; i++) {
+      currPackage = payloadTable[i].packageName.toLowerCase();
+      currModule = payloadTable[i].moduleName.toLowerCase();
+      if ((currPackage == prevPackage) && (currModule == prevModule)) {
+          console.log("\t\t"+ payloadTable[i].payloadRev);
+          mytreeEntry = {"title": payloadTable[i].payloadRev,
+                              "id": payloadTable[i].recordId,
+                              "extraClasses":"answer"};
+          mytree[0].children[packageIndex].children[moduleIndex].children.push(mytreeEntry);
+      } else if (currPackage == prevPackage)  {
+           if (currModule == prevModule) {
+               console.log("\t\t"+ payloadTable[i].payloadRev);
+               mytreeEntry = {"title": payloadTable[i].payloadRev,
+                              "id": payloadTable[i].recordId,
+                              "extraClasses":"answer"};
+               mytree[0].children[packageIndex].children[moduleIndex].children.push(mytreeEntry);
+           } else {
+               prevModule = payloadTable[i].moduleName.toLowerCase();
+               console.log("\t"+ prevModule);
+               console.log("\t\t"+ payloadTable[i].payloadRev);
+               mytreeEntry = {"title": prevModule,
+                              "id": payloadTable[i].recordId,
+                              "extraClasses":"yes",
+                              "children" : new Array() };
+               mytree[0].children[packageIndex].children.push(mytreeEntry);
+               moduleIndex = mytree[0].children[packageIndex].children.length - 1;
+               mytreeEntry = {"title": payloadTable[i].payloadRev,
+                              "id": payloadTable[i].recordId,
+                              "extraClasses":"answer"};
+               mytree[0].children[packageIndex].children[moduleIndex].children.push(mytreeEntry);
+           }
+      } else {
+              prevPackage = payloadTable[i].packageName.toLowerCase();
+              console.log(prevPackage);
+              mytreeEntry = {"title": prevPackage,
+                              "id": payloadTable[i].recordId,
+                              "extraClasses":"yes",
+                              "children" : new Array() };
+              mytree[0].children.push(mytreeEntry);
+              packageIndex = mytree[0].children.length - 1;
+              prevModule = payloadTable[i].moduleName.toLowerCase();
+              mytreeEntry = {"title": prevModule,
+                              "id": payloadTable[i].recordId,
+                              "extraClasses":"yes",
+                              "children" : new Array() };
+              mytree[0].children[packageIndex].children.push(mytreeEntry);
+              moduleIndex = mytree[0].children[packageIndex].children.length -1;
+              console.log("\t"+ prevModule);
+              console.log("\t\t"+ payloadTable[i].payloadRev);
+              mytreeEntry = {"title": payloadTable[i].payloadRev,
+                              "id": payloadTable[i].recordId,
+                              "extraClasses":"answer"};
+              mytree[0].children[packageIndex].children[moduleIndex].children.push(mytreeEntry);
+      }
+   }
+   treeString = treeString + treeStringClose;
+   //console.log(treeString);
+   treeData = mytree;
+}
+
+
+
+
+//
+//
+//
+
+//
+// Global Tag Tree functions
+//
+
+//
+//
+//
+
 
 //
 // get Payloads based on index
@@ -89,13 +300,11 @@ treeString = treeStringBegin;
         }
         treeString = treeString + ',';
      }
-     alert(treeString);
      treeData = JSON.parse(treeString);
-     alert("Done getGlobalTagTreeData");
 }
 
 
-function getPayloadTreeData(index) {
+function xgetPayloadTreeData(index) {
       treeData =
 
 [
