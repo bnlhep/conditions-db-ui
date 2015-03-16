@@ -1,6 +1,6 @@
 function set_global_tag_tmpl (types) {  
  create_global_tag_tmpl = ' <div class="col-md-6" id="right" >'
-      +  '   <form role = "form"> '
+      +  '   <form role = "form" id="frm_create_global_tag" > '
       +  '   <div class="form-horizontal" > '
       +  '   <div class="form-group" > '
       +  '   <label id="label_create_gt_form" >Create Global Tag</label> '
@@ -21,8 +21,9 @@ function set_global_tag_tmpl (types) {
       +  '   </div> '
       +  '   <div class="form-group" > '
       +  '   <button type="submit" class="btn btn-default" onclick="(new_global_tag(input_gtname.value , textarea_gtdesc.value , select_gttype.value ))"> '
-//      +  '   <button type="submit" class="btn btn-default" onclick="new_global_tag(1,2,3)"> '
       +  '   Create</button>  '
+      +  '   <button type="cancel" class="btn btn-default" onclick="( clear_right_div ())"> '
+      +  '   Cancel</button>  '
       +  '   </div> '
       +  '  </form> '
       +  '  </div> ';
@@ -41,10 +42,14 @@ function set_global_tag_tmpl (types) {
     data:  new_tag,
     contentType: "application/json",
     async: true,
-    success: function(data){alert(data);},
+    //success: function(data){alert(data);},
+    success: function(data){
+            $('#frm_create_global_tag' ).each(function(){ this.reset(); }); getTreeData();
+   $("#tree").fancytree("getTree").reload(treeData).done(function(){ });},
     failure: function(errMsg) {
         alert(errMsg);
     }
     });
     //alert(name + ' ' + type + ' ' + description); 
+    $("#tree").fancytree();
   }
