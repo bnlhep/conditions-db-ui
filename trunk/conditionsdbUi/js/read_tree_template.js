@@ -285,7 +285,7 @@ function getPayloads(index) {
        + '", "id": "' 
        + payloadid_prefix 
        + index 
-       + '", "dbid": "' + index
+       + '", "dbid": "' + payload[p].payloadId 
        + '", "type": "payload" '
        + ', "description": "" '
        + ', "extraClasses": "answer"}';
