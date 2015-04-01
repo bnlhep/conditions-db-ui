@@ -1,6 +1,5 @@
 function set_global_tag_tmpl (types) {  
- create_global_tag_tmpl = ' <div class="col-md-6" id="right" >'
-      +  '   <form role = "form" id="frm_create_global_tag" > '
+ create_global_tag_tmpl =  '   <form role = "form" id="frm_create_global_tag" > '
       +  '   <div class="form-horizontal" > '
       +  '   <div class="form-group" > '
       +  '   <label id="label_create_gt_form" >Create Global Tag</label> '
@@ -25,8 +24,7 @@ function set_global_tag_tmpl (types) {
       +  '   <button type="cancel" class="btn btn-default" onclick="( clear_right_div ())"> '
       +  '   Cancel</button>  '
       +  '   </div> '
-      +  '  </form> '
-      +  '  </div> ';
+      +  '  </form> ';
   }
 
   function new_global_tag(name,description,type) {
@@ -34,22 +32,33 @@ function set_global_tag_tmpl (types) {
          + ' "description":"' + description + '", '
          + ' "isDefault":"false", '
          + ' "name":"' + name + '" } ';
-
+     var Success;
+     var errorMsg;
+     Success = false;
+     errorMsg = ""
     //alert(new_tag); 
     $.ajax({
     url: server + '/globalTag/' + type,
     type: 'POST',
     data:  new_tag,
     contentType: "application/json",
-    async: true,
-    //success: function(data){alert(data);},
+    async: false,
     success: function(data){
-            $('#frm_create_global_tag' ).each(function(){ this.reset(); }); getTreeData();
-   $("#tree").fancytree("getTree").reload(treeData).done(function(){ });},
+       Success = true;
+       errorMsg = "OK";
+    },
     failure: function(errMsg) {
-        alert(errMsg);
+       Success = false;
+       errorMsg = "Failure: " + errMsg;
     }
     });
-    //alert(name + ' ' + type + ' ' + description); 
+    if (Success === false) {
+      alert ("Failure creating global tag");
+    } else {
+      alert ("Success:  " + errorMsg);
+      $('#frm_create_global_tag' ).each(function(){ this.reset(); }); getTreeData();
+      $("#tree").fancytree("getTree").reload(treeData).done(function(){alert('reloaded'); });
+    }
     $("#tree").fancytree();
+    return Success;
   }

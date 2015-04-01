@@ -518,7 +518,7 @@ $(function(){
 	$("#tree").fancytree({
                  source:treeData,
                  selectMode: 1,
-                 checkbox: true,
+                 checkbox: false,
                  autoScroll: true,
                 focus: function(event, data) {
                     //logEvent(event, data);
@@ -528,7 +528,11 @@ $(function(){
                     selectedNode.nodeTitle = data.node.title;
                     //alert ("id " + selectedNode.nodeId + " type " + selectedNode.nodeType + " title " + selectedNode.nodeTitle);
                     if (selectedNode.nodeType === "globaltag") {
+                         var gttmp = retrieveGlobalTagDump(selectedNode.nodeId);
                          document.getElementById('textarea_detail').value = dumpGlobalTag(selectedNode.nodeId);
+                         // Create a Timeline
+                        var timeline = new Object();
+                        timeline = getGlobaltagPayloads(gttmp.name);
                     } else if (selectedNode.nodeType === "payload" ) {
                          document.getElementById('textarea_detail').value = dumpPayload(selectedNode.nodeId);
                     } else if (selectedNode.nodeType === "module" ) {
