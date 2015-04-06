@@ -19,6 +19,7 @@
   <script src="lib/jquery.fancytree.columnview.js" type="text/javascript"></script>
   <script src="lib/jquery.fancytree.dnd.js" type="text/javascript"></script>
   <script src="lib/jquery.fancytree.table.js" type="text/javascript"></script>
+  <script src="lib/bootbox.min.js" type="text/javascript"></script>
   <script src="lib/jquery.ui-contextmenu.min.js" type="text/javascript"></script>
   <script src="lib/vis.js" type="text/javascript" ></script>
 
@@ -58,8 +59,15 @@ $(function() {
               switch_payload_tree();
               read_right_textarea();
           }
+          else if ($(item).text() === "Publish Global Tag") {
+              publish_global_tag();
+          }
           else if ($(item).text() === "Switch Treeview") {
               switch_tree_index();
+          }
+          else if ($(item).text() === "Create Payload IOV") {
+              appCurrentActivity = appActivityTypes[2];
+              create_globaltag_iov();
           } else {
               alert($(item).text());
           }
@@ -275,12 +283,19 @@ $(function() {
 //
 var server;
 var treeIndex;
+var selectedNode;
+var appCurrentActivity;
+var appActivityTypes;
+
 server = "http://belle2db.hep.pnnl.gov/b2s/rest/v1";
 //server = "http://offshoreweb.pnnl.gov:8080/b2s/rest/v1";
 treeIndex = 0;
-var selectedNode;
 selectedNode = new Object();
 selectedNode = {"nodeId":"","nodeType":"","nodeTitle":""};
+appActivityTypes  = new Array();
+appActivityTypes = ["GENERAL","CREATE_GLOBAL_TAG", "CREATE_PAYLOAD_IOV" ];
+appCurrentActivity = appActivityTypes[0]; 
+
 </script>
 
 <!--                                   -->
@@ -289,6 +304,7 @@ selectedNode = {"nodeId":"","nodeType":"","nodeTitle":""};
 
   <script src="js/read_db_refs.js" type="text/javascript"></script>
   <script src="js/create_global_tag_template.js" type="text/javascript"></script>
+  <script src="js/create_globaltag_iov_template.js" type="text/javascript"></script>
   <script src="js/clear_right_template.js" type="text/javascript"></script>
   <script src="js/read_global_tag_template.js" type="text/javascript"></script>
   <script src="js/read_tree_template.js" type="text/javascript"></script>
@@ -330,25 +346,38 @@ selectedNode = {"nodeId":"","nodeType":"","nodeTitle":""};
 function read_global_tag_tree () {
    $("#left").html(window.create_global_tag_tree_tmpl);
 }
+
+function publish_global_tag () {
+bootbox.confirm("Are you sure you want to publish?", function(result) {
+  Example.show("Confirm result: "+result);
+}); 
+}
  
 function create_global_tag () {
    set_global_tag_tmpl(get_gt_types());
    $("#right").html(window.create_global_tag_tmpl);
 }
  
+function create_globaltag_iov () {
+   appCurrentActivity = appActivityTypes[2];
+   switch_payload_tree();
+   set_globaltag_iov_tmpl(get_gt_types());
+   $("#right").html(window.create_globaltag_iov_tmpl);
+}
+ 
 function switch_tree_index () {
    var conditionsDbTree;
    conditionsDbTree = $("#tree").fancytree("getTree");
    if (treeIndex == 1) {
-    $("label[for='treelabel']").text('Global Tag Directory');
+    $("label[for='treelabel']").text('Browse');
       treeIndex = 0;
       $("#tree").fancytree({checkbox:false});
       $("#tree").fancytree({selectMode:1});
    } else {
      treeIndex = 1;
-    $("label[for='treelabel']").text('Payload Directory for TEST_GT1');
-      $("#tree").fancytree({checkbox:true});
-      $("#tree").fancytree({selectMode:3});
+    $("label[for='treelabel']").text('Browse');
+      $("#tree").fancytree({checkbox:false});
+      $("#tree").fancytree({selectMode:1});
    }
    getTreeData();
    conditionsDbTree.reload(treeData).done(function(){
@@ -359,8 +388,8 @@ function switch_payload_tree () {
   var conditionsDbTree;
   conditionsDbTree = $("#tree").fancytree("getTree");
   treeIndex = 1;
-  $("label[for='treelabel']").text('Payload Directory for ' + selectedNode.nodeTitle);
-  $("#tree").fancytree({selectMode:3});
+  $("label[for='treelabel']").text('Browse');
+  $("#tree").fancytree({selectMode:1});
   getTreeData();
   conditionsDbTree.reload(treeData).done(function(){
   });
@@ -399,6 +428,7 @@ function switch_payload_tree () {
         <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" >Global Tags <span class="caret"></span></a>
           <ul class="dropdown-menu">
           <li> <a  onclick="window.create_global_tag()" id="mnu_creategt">Create...</a> </li>
+          <li> <a  onclick="window.create_globaltag_iov()" id="mnu_creategtiov">Create Payload IOV...</a> </li>
             <li><a >Edit...</a></li>
             <li><a >Approval...</a></li>
           </ul>
@@ -435,7 +465,7 @@ function switch_payload_tree () {
       <table> 
          <tr> 
             <td> 
-                 <label for="treelabel" >Global Tag Directory<label> 
+                 <label for="treelabel" >Browse<label> 
             </td> 
          </tr> 
          <tr>  
@@ -464,6 +494,8 @@ function switch_payload_tree () {
           <ul class="dropdown-menu" role="menu">
               <li><a tabindex="-1">Create Global Tag</a></li>
               <li><a tabindex="-1">Clone Global Tag</a></li>
+              <li><a tabindex="-1">Create Payload IOV</a></li>
+              <li><a tabindex="-1" data-toggle="confirmation" >Publish Global Tag</a></li>
               <li class="divider"></li>
               <li><a tabindex="-1">Add Payloads</a></li>
               <li><a tabindex="-1">Switch Treeview</a></li>
