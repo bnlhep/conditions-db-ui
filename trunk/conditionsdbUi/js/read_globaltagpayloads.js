@@ -67,19 +67,19 @@ function getGlobaltagPayloads(name) {
                 });
    }
    for (var p=0; p < globalTagPayload.length; p++) {
-          startInitialRun = xFormDateTime(globalTagPayload[p].payloadIov.initialRunId.runStart);
-          endFinalRun = xFormDateTime(globalTagPayload[p].payloadIov.finalRunId.runEnd);
+          startInitialRun = xFormDateTime(globalTagPayload[p].payloadIovs[0].initialRunId.runStart);
+          endFinalRun = xFormDateTime(globalTagPayload[p].payloadIovs[0].finalRunId.runEnd);
           items.push({"id":p, 
                                   "group":p,
                                   "title":"Experiment: "
-                                  + globalTagPayload[p].payloadIov.initialRunId.experimentId.name
+                                  + globalTagPayload[p].payloadIovs[0].initialRunId.experimentId.name
                                   + "\nRun: "
-                                  + globalTagPayload[p].payloadIov.initialRunId.name 
+                                  + globalTagPayload[p].payloadIovs[0].initialRunId.name 
                                   + "\nStart: "
                                   + startInitialRun 
                                   + "\nFinish: " 
                                   + endFinalRun, 
-                                  "content":globalTagPayload[p].payloadIov.initialRunId.name, 
+                                  "content":globalTagPayload[p].payloadIovs[0].initialRunId.name, 
                                   "start":startInitialRun, 
                                   "end":endFinalRun}); 
    }
@@ -98,3 +98,55 @@ function getGlobaltagPayloads(name) {
    return timeline;
 }
 
+function getGlobaltagPayloadRecords(name) {
+   var results;
+   var buildId;
+   var buildSortKey;
+   var payloadList = new Object();
+   var buildString = "[";
+
+
+   payloadList = $.parseJSON(
+    $.ajax(
+        {
+           url: server + "/payloads",
+           async: false,
+           dataType: 'json'
+        }
+       ).responseText
+    );
+   for (var i = 0; i < payloadList.length; i++) {
+      buildId = payloadList[i].basf2Module.basf2Package.name
+                + '...'
+                + payloadList[i].basf2Module.name
+                + '...'
+                + payloadList[i].revision ;
+      buildSortKey =  payloadList[i].basf2Module.basf2Package.name
+                + '...'
+                + payloadList[i].basf2Module.name ;
+      buildString = buildString
+                + '{"recordId": "'
+                + buildId
+                + '","sortKey": "'
+                + buildSortKey
+                + '","packageName": "'
+                + payloadList[i].basf2Module.basf2Package.name
+                + '","moduleName": "'
+                + payloadList[i].basf2Module.name
+                + '","payloadRev": "'
+                + payloadList[i].revision
+                + '","payloadId": "'
+                + payloadList[i].payloadId
+                + '","hasGlobalTag":' +  isPayloadAssignedToGlobalTag(payloadList[i].payloadId)
+                + ' }';
+      if (i < (payloadList.length-1)) {
+        buildString = buildString + ',';
+      }
+
+   }
+   buildString = buildString + ']'
+   results = buildString;
+   console.log(buildString);
+   return results;
+
+}

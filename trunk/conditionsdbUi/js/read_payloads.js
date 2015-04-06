@@ -46,55 +46,23 @@ function getPayloads(index) {
 }
 
 
-function getPayloadTreeData(index) {
-      treeData =
-
-[
-        {"title": "<strong>Global Tags</strong>", "expanded": true, "folder": true, "children": [
-                {"title": "TEST_GT1", "extraClasses": "yes", "children": [
-                        {"title": "<strong>Payloads</strong>", "extraClasses": "yes", "children": [
-                                {"title": "Payload-1", "extraClasses": "yes", "children": [
-                                    {"title": "Module-1", "extraClasses": "yes", "children": [
-                                        {"title": "IOV-1", "extraClasses": "answer"},
-                                        {"title": "IOV-2", "extraClasses": "answer"},
-                                        {"title": "IOV-3", "extraClasses": "answer"}
-                                   ]}
-                                ]}
-                        ]}
-                ]},
-                {"title": "TEST_GT2", "extraClasses": "answer"},
-                {"title": "TEST_GT3", "extraClasses": "answer"},
-                {"title": "TEST_GT4", "extraClasses": "answer"},
-                {"title": "TEST_GT5", "extraClasses": "answer"},
-                {"title": "TEST_GT6", "extraClasses": "answer"},
-                {"title": "TEST_GT7", "extraClasses": "answer"},
-                {"title": "TEST_GT8", "extraClasses": "answer"},
-                {"title": "TEST_GT9", "extraClasses": "answer"},
-                {"title": "TEST_GT10", "extraClasses": "answer"}
-        ]}
-]
-   treeString = JSON.stringify(treeData);
 
 
-
-}
-
-
-function payloadsAssignedToGlobalTag(id) {
-  var results;
-  results = new Object();
-  results  = $.parseJSON(
-  $.ajax(
-        {
-           url: server + "/globalTag/" + id + "/payloads",
-           async: false,
-           dataType: 'json'
-        }
-       ).responseText
-  );
-  payloadsForGlobalTag = results;
+//EGS THIS MAY BE OBSOLETE function payloadsAssignedToGlobalTag(id) {
+//EGS THIS MAY BE OBSOLETE   var results;
+//EGS THIS MAY BE OBSOLETE   results = new Object();
+//EGS THIS MAY BE OBSOLETE   results  = $.parseJSON(
+//EGS THIS MAY BE OBSOLETE   $.ajax(
+//EGS THIS MAY BE OBSOLETE         {
+//EGS THIS MAY BE OBSOLETE            url: server + "/globalTag/" + id + "/payloads",
+//EGS THIS MAY BE OBSOLETE            async: false,
+//EGS THIS MAY BE OBSOLETE            dataType: 'json'
+//EGS THIS MAY BE OBSOLETE         }
+//EGS THIS MAY BE OBSOLETE        ).responseText
+//EGS THIS MAY BE OBSOLETE   );
+//EGS THIS MAY BE OBSOLETE   payloadsForGlobalTag = results;
   
-}
+//EGS THIS MAY BE OBSOLETE }
 
 function isPayloadAssignedToGlobalTag(id) {
   var results;
@@ -115,7 +83,6 @@ function getAllPayloads() {
    var payloadList = new Object();
    var buildString = "[";
 
-   payloadsAssignedToGlobalTag(1);
    
    payloadList = $.parseJSON(
     $.ajax(
