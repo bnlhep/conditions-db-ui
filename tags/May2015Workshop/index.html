@@ -1,0 +1,625 @@
+<html lang="en">
+<head>
+  <title>Belle II Conditions Database</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!--Stylesheets for GUI -->
+    
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link href="css/skin-win8/ui.fancytree.css" rel="stylesheet" type="text/css"> 
+  <link href="css/vis.css" rel="stylesheet" type="text/css" />
+<!--Javascript Libraries -->
+
+  <script src="lib/jquery-1.11.1.min.js" type="text/javascript"></script>
+  <script src="lib/underscore-min.js" type="text/javascript"></script>
+  <script src="lib/vendor/bootstrap.min.js" type="text/javascript"></script>
+  <script src="lib/jquery-ui.custom.js" type="text/javascript"></script>
+  <script src="lib/jquery.fancytree.js" type="text/javascript"></script>
+  <script src="lib/jquery.fancytree.filter.js" type="text/javascript"></script>
+  <script src="lib/jquery.fancytree.columnview.js" type="text/javascript"></script>
+  <script src="lib/jquery.fancytree.dnd.js" type="text/javascript"></script>
+  <script src="lib/jquery.fancytree.table.js" type="text/javascript"></script>
+  <script src="lib/bootbox.min.js" type="text/javascript"></script>
+  <script src="lib/jquery.ui-contextmenu.min.js" type="text/javascript"></script>
+  <script src="lib/vis.js" type="text/javascript" ></script>
+
+<style type="text/css">
+#contextMenu {
+  position: absolute;
+  display:none;
+}
+</style>
+
+  <style type="text/css">
+
+    .vis.timeline .item.range .content {
+      overflow: visible;
+    }
+  </style>
+
+<style type="text/css">
+ul.fancytree-container {
+  width: 700px;
+  height: 300px;
+  overflow: auto;
+  position: relative;
+  outline:none !important;
+}
+</style>
+
+
+<script type="text/javascript">
+$(function() {
+     $("#tree").contextmenu({
+        target: '#context-menu2',
+        onItem: function(e, item) {
+          if ($(item).text() === "Create Global Tag") {
+              appCurrentActivity = appActivityTypes[1];
+              create_global_tag () ;
+          } 
+          else if ($(item).text() === "Clone Global Tag") {
+              appCurrentActivity = appActivityTypes[0];
+              clone_global_tag () ;
+          }
+          else if ($(item).text() === "Edit Global Tag") {
+              appCurrentActivity = appActivityTypes[3];
+              edit_global_tag () ;
+          }
+          else if ($(item).text() === "Add Payloads") {
+              switch_payload_tree();
+              read_right_textarea();
+          }
+          else if ($(item).text() === "Publish Global Tag") {
+              appCurrentActivity = appActivityTypes[0];
+              publish_global_tag();
+          }
+          else if ($(item).text() === "Validate Global Tag") {
+              appCurrentActivity = appActivityTypes[0];
+              validate_global_tag();
+          }
+          else if ($(item).text() === "Invalidate Global Tag") {
+              appCurrentActivity = appActivityTypes[0];
+              invalidate_global_tag();
+          }
+          else if ($(item).text() === "Switch Treeview") {
+              switch_tree_index();
+          }
+          else if ($(item).text() === "Add Payload IOV") {
+              appCurrentActivity = appActivityTypes[2];
+              create_globaltag_iov();
+          }
+        }
+     });
+});
+
+
+/*!
+ * Bootstrap Context Menu
+ * Version: 2.1
+ * A small variation of the dropdown plugin by @sydcanem
+ * https://github.com/sydcanem/bootstrap-contextmenu
+ *
+ * New options added by @jeremyhubble for javascript launching
+ *  $('#elem').contextmenu({target:'#menu',before:function(e) { return true; } });
+ *
+ *
+ * Twitter Bootstrap (http://twitter.github.com/bootstrap).
+ */
+
+/* =========================================================
+ * bootstrap-contextmenu.js
+ * =========================================================
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ========================================================= */
+
+!(function($) {
+
+	"use strict"; // jshint ;_;
+
+	/* CONTEXTMENU CLASS DEFINITION
+	 * ============================ */
+
+	var ContextMenu = function (elements, options) {
+			this.$elements = $(elements)
+			this.options = options
+			this.before = this.options.before || this.before
+			this.onItem = this.options.onItem || this.onItem
+			if (this.options.target)
+				this.$elements.attr('data-target',this.options.target)
+
+			this.listen()
+		}
+
+	ContextMenu.prototype = {
+
+		constructor: ContextMenu
+		,show: function(e) {
+
+			var $this = $(this)
+				, $menu
+				, $contextmenu
+				, evt;
+
+
+			if ($this.is('.disabled, :disabled')) return;
+
+			evt = $.Event('context');
+			if (!this.before.call(this,e,$(e.currentTarget))) return;
+			this.$elements.trigger(evt);
+
+			$menu = this.getMenu();
+
+			var tp = this.getPosition(e, $menu);
+			$menu.attr('style', '')
+				.css(tp)
+				.data('_context_this_ref', this)
+				.addClass('open');
+
+
+			return false;
+		}
+
+		,closemenu: function(e) {
+			this.getMenu().removeClass('open');
+		}
+
+		,before: function(e) {
+			return true;
+		}
+
+		,onItem: function(e, context) {
+			return true;
+		}
+
+		,listen: function () {
+			var _this = this;
+			this.$elements
+					.on('contextmenu.context.data-api', $.proxy(this.show, this));
+			$('html')
+					.on('click.context.data-api', $.proxy(this.closemenu, this));
+
+			var $target = $(this.$elements.attr('data-target'));
+
+			$target.on('click.context.data-api', function (e) {
+				if($(this).data('_context_this_ref') == _this) {
+					_this.onItem.call(this,e,$(e.target));
+				}
+			});
+
+			$('html').on('click.context.data-api', function (e) {
+				if (!e.ctrlKey) {
+					$target.removeClass('open');
+				}
+			});
+		}
+
+		,destroy: function() {
+			this.$elements.off('.context.data-api').removeData('context');
+			$('html').off('.context.data-api');
+
+			var $target = $(this.$elements.attr('data-target'));
+			$target.off('.context.data-api');
+		}
+
+		,getMenu: function () {
+			var selector = this.$elements.attr('data-target')
+				, $menu;
+
+			if (!selector) {
+				selector = this.$elements.attr('href')
+				selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') //strip for ie7
+			}
+
+			$menu = $(selector);
+
+			return $menu;
+		}
+
+		,getPosition: function(e, $menu) {
+			var mouseX = e.clientX
+				, mouseY = e.clientY
+				, boundsX = $(window).width()
+				, boundsY = $(window).height()
+				, menuWidth = $menu.find('.dropdown-menu').outerWidth()
+				, menuHeight = $menu.find('.dropdown-menu').outerHeight()
+				, tp = {"position":"absolute"}
+				, Y, X;
+
+			if (mouseY + menuHeight > boundsY) {
+				Y = {"top": mouseY - menuHeight + $(window).scrollTop()};
+			} else {
+				Y = {"top": mouseY + $(window).scrollTop()};
+			}
+
+			if ((mouseX + menuWidth > boundsX) && ((mouseX - menuWidth) > 0)) {
+				X = {"left": mouseX - menuWidth + $(window).scrollLeft()};
+			} else {
+				X = {"left": mouseX + $(window).scrollLeft()};
+			}
+
+			return $.extend(tp, Y, X);
+		}
+
+		,clearMenus: function(e) {
+			if (!e.ctrlKey) {
+				$('[data-toggle=context]').each(function() {
+					this.getMenu()
+						.removeClass('open');
+				});
+			}
+		}
+	}
+
+	/* CONTEXT MENU PLUGIN DEFINITION
+	 * ========================== */
+
+	$.fn.contextmenu = function (option,e) {
+		var $this = this;
+		return (function () {
+			var data = $this.data('context')
+				, options = typeof option == 'object' && option
+
+			if (!data) $this.data('context', (data = new ContextMenu($this, options)));
+			// "show" method must also be passed the event for positioning
+			if (typeof option == 'string') data[option].call(data,e);
+		})();
+	}
+
+	$.fn.contextmenu.Constructor = ContextMenu;
+
+	/* APPLY TO STANDARD CONTEXT MENU ELEMENTS
+	 * =================================== */
+
+	$(document)
+		.on('contextmenu.context.data-api', '[data-toggle=context]', function(e) {
+				$(this).contextmenu('show',e);
+				e.preventDefault();
+		});
+
+}(window.jQuery));
+</script>
+
+<script src="js/read_globaltagpayloads.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+
+
+//
+// Global variable settings
+//
+var server;
+var treeIndex;
+var selectedNode;
+var appCurrentActivity;
+var appActivityTypes;
+
+server = "http://belle2db.hep.pnnl.gov/b2s/rest/v1";
+//server = "http://offshoreweb.pnnl.gov:8080/b2s/rest/v1";
+treeIndex = 0;
+selectedNode = new Object();
+selectedNode = {"nodeId":"","nodeType":"","nodeTitle":""};
+appActivityTypes  = new Array();
+appActivityTypes = ["GENERAL","CREATE_GLOBAL_TAG", "CREATE_PAYLOAD_IOV", "EDIT_GLOBAL_TAG" ];
+appCurrentActivity = appActivityTypes[0]; 
+
+</script>
+
+<!--                                   -->
+<!-- Conditions DB Application Scripts -->
+<!--                                   -->
+
+  <script src="js/read_db_refs.js" type="text/javascript"></script>
+  <script src="js/create_global_tag_template.js" type="text/javascript"></script>
+  <script src="js/edit_global_tag_template.js" type="text/javascript"></script>
+  <script src="js/create_globaltag_iov_template.js" type="text/javascript"></script>
+  <script src="js/clear_right_template.js" type="text/javascript"></script>
+  <script src="js/read_global_tag_template.js" type="text/javascript"></script>
+  <script src="js/read_tree_template.js" type="text/javascript"></script>
+  <script src="js/read_right_textarea_template.js" type="text/javascript"></script>
+  <script src="js/read_invalid_global_tag_dropdown_menu_template.js" type="text/javascript"></script>
+  <script src="js/read_published_global_tag_dropdown_menu_template.js" type="text/javascript"></script>
+  <script src="js/read_new_global_tag_dropdown_menu_template.js" type="text/javascript"></script>
+  <script src="js/nofunction_dropdown_menu_template.js" type="text/javascript"></script>
+  <script src="js/read_published_global_tag_main_menu_template.js" type="text/javascript"></script>
+  <script src="js/read_invalid_global_tag_main_menu_template.js" type="text/javascript"></script>
+  <script src="js/read_new_global_tag_main_menu_template.js" type="text/javascript"></script>
+  <script src="js/change_global_tag_status.js" type="text/javascript"></script>
+
+<!--                                   -->
+<!-- General Fancy Tree Styling        -->
+<!--                                   -->
+
+<link href="css/prettify.css" rel="stylesheet">
+<script src="lib/prettify.js" type="text/javascript"></script>
+<link href="css/sample.css" rel="stylesheet" type="text/css">
+<script src="lib/sample.js" type="text/javascript"></script>
+
+ <style type="text/css">
+	span.fancytree-node.gtpublish span.fancytree-icon {
+		background-position: 0 0;
+		background-image: url("skin-custom/gtpublish.png");
+	}
+	span.fancytree-node.gtinvalid span.fancytree-icon {
+		background-position: 0 0;
+		background-image: url("skin-custom/gtinvalid.png");
+	}
+	span.fancytree-node.gtnew span.fancytree-icon {
+		background-position: 0 0;
+		background-image: url("skin-custom/gtnew.png");
+	}
+</style>
+
+<!--                                                   -->
+<!-- Conditions DB UI SPA Web Page Content Swap Logic  -->
+<!--                                                   -->
+
+
+
+<script type="text/javascript">
+
+
+function read_global_tag_tree () {
+   $("#left").html(window.create_global_tag_tree_tmpl);
+}
+
+function publish_global_tag () {
+bootbox.confirm("Are you sure you want to publish?", function(result) {
+  if (result == true) {
+     alert ("Publish" + selectedNode.nodeId); 
+     window.change_global_tag_status(selectedNode.nodeId, "PUBLISH"); 
+     getTreeData();
+      $("#tree").fancytree("getTree").reload(treeData).done(function(){ });
+  } else {
+     alert ("Operation canceled");
+  }
+}); 
+}
+ 
+function validate_global_tag () {
+bootbox.confirm("Are you sure you want to make the global tag valid?", function(result) {
+  if (result == true) {
+     alert ("Validate");
+     window.change_global_tag_status(selectedNode.nodeId, "VALID");
+     getTreeData();
+      $("#tree").fancytree("getTree").reload(treeData).done(function(){ });
+  } else {
+     alert ("Operation canceled");
+
+  }
+});
+}
+
+function invalidate_global_tag () {
+bootbox.confirm("Are you sure you want to make the global tag invalid?", function(result) {
+  if (result == true) {
+     alert ("Invalidate"); 
+     window.change_global_tag_status(selectedNode.nodeId, "INVALID"); 
+     getTreeData();
+      $("#tree").fancytree("getTree").reload(treeData).done(function(){ });
+  } else {
+     alert ("Operation canceled");
+
+  }
+}); 
+}
+function create_global_tag () {
+   set_global_tag_tmpl(get_gt_types());
+   $("#right").html(window.create_global_tag_tmpl);
+}
+
+
+function edit_global_tag() {
+   if (window.selectedNode.nodeType === "globaltag") {
+      set_edit_global_tag_tmpl(get_gt_types(), selectedNode.nodeId);
+      $("#right").html(window.edit_global_tag_tmpl);
+      window.populate_edit_with_existing_global_tag(selectedNode.nodeTitle)
+   } else {
+      alert ("Global tag must be selected to Clone Global Tag");
+   }
+
+}
+ 
+function clone_global_tag () {
+   if (window.selectedNode.nodeType === "globaltag") {
+      //  alert(selectedNode.nodeId);
+        window.clone_global_tag_operation(selectedNode.nodeId);
+     getTreeData();
+      $("#tree").fancytree("getTree").reload(treeData).done(function(){ });
+   } else {
+      alert ("Global tag must be selected to Clone Global Tag");
+   }
+}
+
+function create_globaltag_iov () {
+   if (window.selectedNode.nodeType === "globaltag") {
+      appCurrentActivity = appActivityTypes[2];
+      switch_payload_tree();
+      set_globaltag_iov_tmpl(get_gt_types());
+      $("#right").html(window.create_globaltag_iov_tmpl);
+      $("#input_gtname").val(window.selectedNode.nodeTitle);
+   } else {
+      alert ("Global tag must be selected to Add Payload IOV");
+   }
+}
+ 
+function switch_tree_index () {
+   var conditionsDbTree;
+   conditionsDbTree = $("#tree").fancytree("getTree");
+   if (treeIndex == 1) {
+    $("label[for='treelabel']").text('Browse');
+      treeIndex = 0;
+      $("#tree").fancytree({checkbox:false});
+      $("#tree").fancytree({selectMode:1});
+   } else {
+     treeIndex = 1;
+    $("label[for='treelabel']").text('Browse');
+      $("#tree").fancytree({checkbox:false});
+      $("#tree").fancytree({selectMode:1});
+   }
+   getTreeData();
+   conditionsDbTree.reload(treeData).done(function(){
+  });
+}
+
+function switch_payload_tree () {
+  var conditionsDbTree;
+  conditionsDbTree = $("#tree").fancytree("getTree");
+  treeIndex = 1;
+  $("label[for='treelabel']").text('Select Payload For Global Tag:  ' + selectedNode.nodeTitle);
+  $("#tree").fancytree({selectMode:1});
+  getTreeData();
+  conditionsDbTree.reload(treeData).done(function(){
+  });
+}
+
+
+ function read_global_tag_details () {
+   $("#right").html(window.read_global_tag_tmpl);
+ }
+
+ function clear_right_div () {
+   $("#right").html(window.clear_right_tmpl);
+ }
+
+
+// function read_right_textarea () {
+//   $("#right").html(window.read_right_textarea_tmpl);
+// }
+
+ function filter_invalid(flag) {
+   var filtertree = new Object();
+   var myrex = new Object();
+
+   filtertree = $("#tree").fancytree("getTree");
+   if (flag ) {
+     //filtertree.options.filter.mode = 'hide';
+     filtertree.clearFilter();
+     myrex = new RegExp("gtinvalid", "i");
+     filtertree.filterNodes(function(node) {
+//     if (myrex.test(node.extraClasses)) {
+//        alert(node.title + " " + node.extraClasses);
+//     }
+     return !myrex.test(node.extraClasses);
+     //return !myrex.test(node.key); 
+                        });
+   } else {
+     filtertree.clearFilter();
+   }
+ }
+//filter_invalid(true);
+
+</script>
+
+</head>
+<body>
+
+<!--              -->
+<!-- Top Menu Bar -->
+<!--              -->
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" >Conditions Database</a>
+    </div>
+    <div id="mainmenu_globaltag" name="mainmenu_globaltag" > 
+      <ul class="nav navbar-nav"   >
+        <li class="dropdown"  ><a class="dropdown-toggle" data-toggle="dropdown" >Global Tags <span class="caret"></span></a>
+          <ul class="dropdown-menu"  >
+          <li role="presentation"> <a  onclick="window.create_global_tag()" id="mnu_creategt">Create...</a> </li>
+          </ul>
+        </li>
+      </li>
+    </ul>
+    </div>
+</nav>
+
+<!--                        -->
+<!-- Row Content Container -->
+<!--                        -->
+  
+
+
+<!--                        -->
+<!-- Left Content Container -->
+<!--                        -->
+
+    <div class="col-md-6"  id="left" >
+      <table> 
+         <tr> 
+            <td> 
+                 <label for="treelabel" >Browse<label> 
+            </td> 
+         </tr> 
+         <tr>  
+            <td>  
+                 <div id="tree"></div>  
+            </td> 
+          </tr> 
+       </table> 
+    </div> 
+
+
+<!--                         -->
+<!-- Right Content Container -->
+<!--                         -->
+
+    <div class="col-md-6" id="right" >
+    </div>
+
+
+
+
+
+        <div id="context-menu2" name="context-menu2" >
+          <ul class="dropdown-menu" role="menu">
+          </ul>
+        </div>
+
+<!--                        -->
+<!-- Bottom Menu            -->
+<!--                        -->
+
+<div class="navbar navbar-default navbar-fixed-bottom">
+  <div class="container">
+<!--    <span class="navbar-text">  -->
+<div class="row">
+  <div class="col-md-6">
+    <div class="input-group" style="border:none" >
+      <span class="input-group-addon" style="border:none" >
+      <label>Select Role:</label>
+        <input style="border:none"  type="radio"  name="role" value="C">Coordinator</input>
+        <input style="border:none"  type="radio"  name="role" value="D">Developer</input>
+        <input style="border:none"  type="radio"  name="role" value="G" checked="checked">General User</input>
+      </span>
+   </div>
+   </div>
+  <div class="col-md-6">
+    <div class="input-group" style="border:none" >
+      <span style="border:none">
+      <label>Hide Invalid Global Tags</label>
+      <input id="filter_invalid_tags" type="checkbox" name="filter_invalid_tags" style="border:none" onchange="filter_invalid(document.getElementById('filter_invalid_tags').checked)"/> 
+      </span>
+    </div>
+   </div>
+</div><!-- /.row -->
+<!--    </span> -->
+  </div>
+</div>
+
+</body>
+
+</html>
+
