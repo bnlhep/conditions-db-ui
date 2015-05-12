@@ -1,13 +1,13 @@
 <html lang="en">
 <head>
-  <title>Conditions Database Demo</title>
+  <title>Belle II Conditions Database</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <!--Stylesheets for GUI -->
     
   <link rel="stylesheet" href="css/bootstrap.min.css">
-  <link href="css/skin-win8/ui.fancytree.css" rel="stylesheet" type="text/css">
+  <link href="css/skin-win8/ui.fancytree.css" rel="stylesheet" type="text/css"> 
   <link href="css/vis.css" rel="stylesheet" type="text/css" />
 <!--Javascript Libraries -->
 
@@ -16,6 +16,7 @@
   <script src="lib/vendor/bootstrap.min.js" type="text/javascript"></script>
   <script src="lib/jquery-ui.custom.js" type="text/javascript"></script>
   <script src="lib/jquery.fancytree.js" type="text/javascript"></script>
+  <script src="lib/jquery.fancytree.filter.js" type="text/javascript"></script>
   <script src="lib/jquery.fancytree.columnview.js" type="text/javascript"></script>
   <script src="lib/jquery.fancytree.dnd.js" type="text/javascript"></script>
   <script src="lib/jquery.fancytree.table.js" type="text/javascript"></script>
@@ -39,10 +40,11 @@
 
 <style type="text/css">
 ul.fancytree-container {
-  width: 350px;
-  height: 600px;
+  width: 700px;
+  height: 300px;
   overflow: auto;
   position: relative;
+  outline:none !important;
 }
 </style>
 
@@ -53,23 +55,39 @@ $(function() {
         target: '#context-menu2',
         onItem: function(e, item) {
           if ($(item).text() === "Create Global Tag") {
+              appCurrentActivity = appActivityTypes[1];
               create_global_tag () ;
+          } 
+          else if ($(item).text() === "Clone Global Tag") {
+              appCurrentActivity = appActivityTypes[0];
+              clone_global_tag () ;
+          }
+          else if ($(item).text() === "Edit Global Tag") {
+              appCurrentActivity = appActivityTypes[3];
+              edit_global_tag () ;
           }
           else if ($(item).text() === "Add Payloads") {
               switch_payload_tree();
               read_right_textarea();
           }
           else if ($(item).text() === "Publish Global Tag") {
+              appCurrentActivity = appActivityTypes[0];
               publish_global_tag();
+          }
+          else if ($(item).text() === "Validate Global Tag") {
+              appCurrentActivity = appActivityTypes[0];
+              validate_global_tag();
+          }
+          else if ($(item).text() === "Invalidate Global Tag") {
+              appCurrentActivity = appActivityTypes[0];
+              invalidate_global_tag();
           }
           else if ($(item).text() === "Switch Treeview") {
               switch_tree_index();
           }
-          else if ($(item).text() === "Create Payload IOV") {
+          else if ($(item).text() === "Add Payload IOV") {
               appCurrentActivity = appActivityTypes[2];
               create_globaltag_iov();
-          } else {
-              alert($(item).text());
           }
         }
      });
@@ -293,7 +311,7 @@ treeIndex = 0;
 selectedNode = new Object();
 selectedNode = {"nodeId":"","nodeType":"","nodeTitle":""};
 appActivityTypes  = new Array();
-appActivityTypes = ["GENERAL","CREATE_GLOBAL_TAG", "CREATE_PAYLOAD_IOV" ];
+appActivityTypes = ["GENERAL","CREATE_GLOBAL_TAG", "CREATE_PAYLOAD_IOV", "EDIT_GLOBAL_TAG" ];
 appCurrentActivity = appActivityTypes[0]; 
 
 </script>
@@ -304,11 +322,20 @@ appCurrentActivity = appActivityTypes[0];
 
   <script src="js/read_db_refs.js" type="text/javascript"></script>
   <script src="js/create_global_tag_template.js" type="text/javascript"></script>
+  <script src="js/edit_global_tag_template.js" type="text/javascript"></script>
   <script src="js/create_globaltag_iov_template.js" type="text/javascript"></script>
   <script src="js/clear_right_template.js" type="text/javascript"></script>
   <script src="js/read_global_tag_template.js" type="text/javascript"></script>
   <script src="js/read_tree_template.js" type="text/javascript"></script>
   <script src="js/read_right_textarea_template.js" type="text/javascript"></script>
+  <script src="js/read_invalid_global_tag_dropdown_menu_template.js" type="text/javascript"></script>
+  <script src="js/read_published_global_tag_dropdown_menu_template.js" type="text/javascript"></script>
+  <script src="js/read_new_global_tag_dropdown_menu_template.js" type="text/javascript"></script>
+  <script src="js/nofunction_dropdown_menu_template.js" type="text/javascript"></script>
+  <script src="js/read_published_global_tag_main_menu_template.js" type="text/javascript"></script>
+  <script src="js/read_invalid_global_tag_main_menu_template.js" type="text/javascript"></script>
+  <script src="js/read_new_global_tag_main_menu_template.js" type="text/javascript"></script>
+  <script src="js/change_global_tag_status.js" type="text/javascript"></script>
 
 <!--                                   -->
 <!-- General Fancy Tree Styling        -->
@@ -319,22 +346,18 @@ appCurrentActivity = appActivityTypes[0];
 <link href="css/sample.css" rel="stylesheet" type="text/css">
 <script src="lib/sample.js" type="text/javascript"></script>
 
-<style type="text/css">
-	span.fancytree-node.no span.fancytree-icon {
+ <style type="text/css">
+	span.fancytree-node.gtpublish span.fancytree-icon {
 		background-position: 0 0;
-		background-image: url("skin-custom/exclamation.png");
+		background-image: url("skin-custom/gtpublish.png");
 	}
-	span.fancytree-node.yes span.fancytree-icon {
+	span.fancytree-node.gtinvalid span.fancytree-icon {
 		background-position: 0 0;
-		background-image: url("skin-custom/accept.png");
+		background-image: url("skin-custom/gtinvalid.png");
 	}
-	span.fancytree-node.link span.fancytree-icon {
+	span.fancytree-node.gtnew span.fancytree-icon {
 		background-position: 0 0;
-		background-image: url("skin-custom/arrow_right.png");
-	}
-	span.fancytree-node.answer span.fancytree-icon {
-		background-position: 0 0;
-		background-image: url("skin-custom/emoticon_smile.png");
+		background-image: url("skin-custom/gtnew.png");
 	}
 </style>
 
@@ -342,27 +365,93 @@ appCurrentActivity = appActivityTypes[0];
 <!-- Conditions DB UI SPA Web Page Content Swap Logic  -->
 <!--                                                   -->
 
+
+
 <script type="text/javascript">
+
+
 function read_global_tag_tree () {
    $("#left").html(window.create_global_tag_tree_tmpl);
 }
 
 function publish_global_tag () {
 bootbox.confirm("Are you sure you want to publish?", function(result) {
-  Example.show("Confirm result: "+result);
+  if (result == true) {
+     alert ("Publish" + selectedNode.nodeId); 
+     window.change_global_tag_status(selectedNode.nodeId, "PUBLISH"); 
+     getTreeData();
+      $("#tree").fancytree("getTree").reload(treeData).done(function(){ });
+  } else {
+     alert ("Operation canceled");
+  }
 }); 
 }
  
+function validate_global_tag () {
+bootbox.confirm("Are you sure you want to make the global tag valid?", function(result) {
+  if (result == true) {
+     alert ("Validate");
+     window.change_global_tag_status(selectedNode.nodeId, "VALID");
+     getTreeData();
+      $("#tree").fancytree("getTree").reload(treeData).done(function(){ });
+  } else {
+     alert ("Operation canceled");
+
+  }
+});
+}
+
+function invalidate_global_tag () {
+bootbox.confirm("Are you sure you want to make the global tag invalid?", function(result) {
+  if (result == true) {
+     alert ("Invalidate"); 
+     window.change_global_tag_status(selectedNode.nodeId, "INVALID"); 
+     getTreeData();
+      $("#tree").fancytree("getTree").reload(treeData).done(function(){ });
+  } else {
+     alert ("Operation canceled");
+
+  }
+}); 
+}
 function create_global_tag () {
    set_global_tag_tmpl(get_gt_types());
    $("#right").html(window.create_global_tag_tmpl);
 }
+
+
+function edit_global_tag() {
+   if (window.selectedNode.nodeType === "globaltag") {
+      set_edit_global_tag_tmpl(get_gt_types(), selectedNode.nodeId);
+      $("#right").html(window.edit_global_tag_tmpl);
+      window.populate_edit_with_existing_global_tag(selectedNode.nodeTitle)
+   } else {
+      alert ("Global tag must be selected to Clone Global Tag");
+   }
+
+}
  
+function clone_global_tag () {
+   if (window.selectedNode.nodeType === "globaltag") {
+      //  alert(selectedNode.nodeId);
+        window.clone_global_tag_operation(selectedNode.nodeId);
+     getTreeData();
+      $("#tree").fancytree("getTree").reload(treeData).done(function(){ });
+   } else {
+      alert ("Global tag must be selected to Clone Global Tag");
+   }
+}
+
 function create_globaltag_iov () {
-   appCurrentActivity = appActivityTypes[2];
-   switch_payload_tree();
-   set_globaltag_iov_tmpl(get_gt_types());
-   $("#right").html(window.create_globaltag_iov_tmpl);
+   if (window.selectedNode.nodeType === "globaltag") {
+      appCurrentActivity = appActivityTypes[2];
+      switch_payload_tree();
+      set_globaltag_iov_tmpl(get_gt_types());
+      $("#right").html(window.create_globaltag_iov_tmpl);
+      $("#input_gtname").val(window.selectedNode.nodeTitle);
+   } else {
+      alert ("Global tag must be selected to Add Payload IOV");
+   }
 }
  
 function switch_tree_index () {
@@ -388,7 +477,7 @@ function switch_payload_tree () {
   var conditionsDbTree;
   conditionsDbTree = $("#tree").fancytree("getTree");
   treeIndex = 1;
-  $("label[for='treelabel']").text('Browse');
+  $("label[for='treelabel']").text('Select Payload For Global Tag:  ' + selectedNode.nodeTitle);
   $("#tree").fancytree({selectMode:1});
   getTreeData();
   conditionsDbTree.reload(treeData).done(function(){
@@ -405,9 +494,31 @@ function switch_payload_tree () {
  }
 
 
- function read_right_textarea () {
-   $("#right").html(window.read_right_textarea_tmpl);
+// function read_right_textarea () {
+//   $("#right").html(window.read_right_textarea_tmpl);
+// }
+
+ function filter_invalid(flag) {
+   var filtertree = new Object();
+   var myrex = new Object();
+
+   filtertree = $("#tree").fancytree("getTree");
+   if (flag ) {
+     //filtertree.options.filter.mode = 'hide';
+     filtertree.clearFilter();
+     myrex = new RegExp("gtinvalid", "i");
+     filtertree.filterNodes(function(node) {
+//     if (myrex.test(node.extraClasses)) {
+//        alert(node.title + " " + node.extraClasses);
+//     }
+     return !myrex.test(node.extraClasses);
+     //return !myrex.test(node.key); 
+                        });
+   } else {
+     filtertree.clearFilter();
+   }
  }
+//filter_invalid(true);
 
 </script>
 
@@ -423,45 +534,29 @@ function switch_payload_tree () {
     <div class="navbar-header">
       <a class="navbar-brand" >Conditions Database</a>
     </div>
-    <div>
-      <ul class="nav navbar-nav">
-        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" >Global Tags <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-          <li> <a  onclick="window.create_global_tag()" id="mnu_creategt">Create...</a> </li>
-          <li> <a  onclick="window.create_globaltag_iov()" id="mnu_creategtiov">Create Payload IOV...</a> </li>
-            <li><a >Edit...</a></li>
-            <li><a >Approval...</a></li>
-          </ul>
-        </li>
-        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" >Search<span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a >Keyword...</a></li>
-            <li><a >Advanced...</a></li>
-          </ul>
-        </li>
-        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" >Test<span class="caret"></span></a>
-          <ul class="dropdown-menu">
-          <li> <a  onclick="window.switch_tree_index()" id="mnu_switch">Toggle Tree...</a> </li>
-          <li> <a  onclick="window.read_right_textarea()" id="mnu_switch">Get Textbox...</a> </li>
+    <div id="mainmenu_globaltag" name="mainmenu_globaltag" > 
+      <ul class="nav navbar-nav"   >
+        <li class="dropdown"  ><a class="dropdown-toggle" data-toggle="dropdown" >Global Tags <span class="caret"></span></a>
+          <ul class="dropdown-menu"  >
+          <li role="presentation"> <a  onclick="window.create_global_tag()" id="mnu_creategt">Create...</a> </li>
           </ul>
         </li>
       </li>
     </ul>
+    </div>
 </nav>
 
 <!--                        -->
 <!-- Row Content Container -->
 <!--                        -->
   
-<div class="container">
 
-  <div class="row">     
 
 <!--                        -->
 <!-- Left Content Container -->
 <!--                        -->
 
-    <div class="col-md-4"  id="left" >
+    <div class="col-md-6"  id="left" >
       <table> 
          <tr> 
             <td> 
@@ -481,24 +576,15 @@ function switch_payload_tree () {
 <!-- Right Content Container -->
 <!--                         -->
 
-    <div class="col-md-8" id="right" >
+    <div class="col-md-6" id="right" >
     </div>
 
-  </div>
 
 
-</div>
 
 
-        <div id="context-menu2">
+        <div id="context-menu2" name="context-menu2" >
           <ul class="dropdown-menu" role="menu">
-              <li><a tabindex="-1">Create Global Tag</a></li>
-              <li><a tabindex="-1">Clone Global Tag</a></li>
-              <li><a tabindex="-1">Create Payload IOV</a></li>
-              <li><a tabindex="-1" data-toggle="confirmation" >Publish Global Tag</a></li>
-              <li class="divider"></li>
-              <li><a tabindex="-1">Add Payloads</a></li>
-              <li><a tabindex="-1">Switch Treeview</a></li>
           </ul>
         </div>
 
@@ -510,7 +596,7 @@ function switch_payload_tree () {
   <div class="container">
 <!--    <span class="navbar-text">  -->
 <div class="row">
-  <div class="col-md-4">
+  <div class="col-md-6">
     <div class="input-group" style="border:none" >
       <span class="input-group-addon" style="border:none" >
       <label>Select Role:</label>
@@ -518,8 +604,16 @@ function switch_payload_tree () {
         <input style="border:none"  type="radio"  name="role" value="D">Developer</input>
         <input style="border:none"  type="radio"  name="role" value="G" checked="checked">General User</input>
       </span>
-    </div><!-- /input-group -->
-  </div><!-- /.col-md-4 -->
+   </div>
+   </div>
+  <div class="col-md-6">
+    <div class="input-group" style="border:none" >
+      <span style="border:none">
+      <label>Hide Invalid Global Tags</label>
+      <input id="filter_invalid_tags" type="checkbox" name="filter_invalid_tags" style="border:none" onchange="filter_invalid(document.getElementById('filter_invalid_tags').checked)"/> 
+      </span>
+    </div>
+   </div>
 </div><!-- /.row -->
 <!--    </span> -->
   </div>

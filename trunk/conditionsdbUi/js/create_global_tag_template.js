@@ -1,28 +1,21 @@
 function set_global_tag_tmpl (types) {  
  create_global_tag_tmpl =  '   <form role = "form" id="frm_create_global_tag" > '
-      +  '   <div class="form-horizontal" > '
-      +  '   <div class="form-group" > '
-      +  '   <label id="label_create_gt_form" >Create Global Tag</label> '
-      +  '   </div> '
-      +  '   <div class="form-group" > '
+      +  '   <div class="panel panel-default"> '
+      +  '   <div class="panel-heading">Create Global Tag</div> '
+      +  '   <div class="panel-body" > '
       +  '   <label id="label_gtname" for="input_gtname" valign="top">Name:</label> '
-      +  '   <input id="input_gtname" placeholder="Enter name"/> '
-      +  '   </div> '
-      +  '   <div class="form-group" > '
+      +  '   <input id="input_gtname" class="form-control" placeholder="Enter name"/> '
       +  '   <label id="label_gttype" for="select_gttype" valign="top">Type:</label> '
       +  '  <select class="form-control" id="select_gttype"> '
       +  gt_types 
       +  ' </select> '
-      +  '   </div> '
-      +  '   <div class="form-group" > '
       +  '   <label id="label_gtdesc" for="textarea_gtdesc" valign="top">Description:</label> '
       +  '   <textarea class="form-control" rows="5" id="textarea_gtdesc" placeholder="Description required"></textarea> '
-      +  '   </div> '
-      +  '   <div class="form-group" > '
       +  '   <button type="submit" class="btn btn-default" onclick="(new_global_tag(input_gtname.value , textarea_gtdesc.value , select_gttype.value ))"> '
       +  '   Create</button>  '
       +  '   <button type="cancel" class="btn btn-default" onclick="( clear_right_div ())"> '
       +  '   Cancel</button>  '
+      +  '   </div> '
       +  '   </div> '
       +  '  </form> ';
   }
@@ -57,8 +50,30 @@ function set_global_tag_tmpl (types) {
     } else {
       alert ("Success:  " + errorMsg);
       $('#frm_create_global_tag' ).each(function(){ this.reset(); }); getTreeData();
-      $("#tree").fancytree("getTree").reload(treeData).done(function(){alert('reloaded'); });
+      $("#tree").fancytree("getTree").reload(treeData).done(function(){ });
     }
     $("#tree").fancytree();
     return Success;
   }
+
+function populate_with_existing_global_tag(name) {
+    var gt = $.parseJSON(
+    $.ajax(
+        {
+           url: server + "/globalTags",
+           async: false,
+           dataType: 'json'
+        }
+       ).responseText
+    );
+    for (var i = 0; i < gt.length; i++) {
+       if (gt[i].name === name) {
+          $('#input_gtname').val(name + "_");          
+          $('#select_gttype').val(gt[i].globalTagType.name);
+          $('#textarea_gtdesc').val(gt[i].description);
+          break;
+       }
+    }
+
+}
+

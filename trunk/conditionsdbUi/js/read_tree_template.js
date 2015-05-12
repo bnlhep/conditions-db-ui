@@ -64,7 +64,7 @@ treeString = "";
 //EGS MAY BE OBSOLETE }
 
 
-function getGlobalTagPayloadRecords(globalTagId) {
+function getGlobalTagPayloadRecords(globalTagId, globalTagName) {
    var results;
    var buildId;
    var buildSortKey;
@@ -83,8 +83,13 @@ function getGlobalTagPayloadRecords(globalTagId) {
         }
        ).responseText
     );
+   if (globalTagName.length == 0) {
+       globalTagName = 'null';
+   }
    for (var i = 0; i < payloadList.length; i++) {
-      buildId = payloadList[i].basf2Module.basf2Package.name
+      buildId = globalTagName 
+                + '...'
+                + payloadList[i].basf2Module.basf2Package.name
                 + '...'
                 + payloadList[i].basf2Module.name
                 + '...'
@@ -202,7 +207,7 @@ function getRelativePath (name) {
     return results; 
 }
 
-function getGlobaltagPayloadTreeData(globalTagId, treeIndex) {
+function getGlobaltagPayloadTreeData(globalTagId, treeIndex, globalTagName, invalidStatus) {
 
    var payloadTable = new Object();
    var prevPackage;
@@ -215,7 +220,7 @@ function getGlobaltagPayloadTreeData(globalTagId, treeIndex) {
    var mytreeEntry;
    mytreeEntry  = new Object();
    addedParentTag = false;
-   payloadTable = getGlobalTagPayloadRecords(globalTagId);
+   payloadTable = getGlobalTagPayloadRecords(globalTagId, globalTagName);
    prevPackage = "";
    prevModule = "";
    packageIndex = 0;
@@ -232,6 +237,9 @@ function getGlobaltagPayloadTreeData(globalTagId, treeIndex) {
                               "description": "",
                               "selected": payloadTable[i].hasGlobalTag,
                               "extraClasses":"answer"};
+          if (invalidStatus) {
+             mytreeEntry.extraClasses = "gtinvalid";
+          }
           treeData[0].children[treeIndex].children[packageIndex].children[moduleIndex].children.push(mytreeEntry);
       } else if (currPackage == prevPackage)  {
            if (currModule == prevModule) {
@@ -243,6 +251,9 @@ function getGlobaltagPayloadTreeData(globalTagId, treeIndex) {
                               "type": "payload",
                               "description": "",
                               "extraClasses":"answer"};
+          if (invalidStatus) {
+             mytreeEntry.extraClasses = "gtinvalid";
+          }
                treeData[0].children[treeIndex].children[packageIndex].children[moduleIndex].children.push(mytreeEntry);
            } else {
                prevModule = payloadTable[i].moduleName.toLowerCase();
@@ -254,7 +265,11 @@ function getGlobaltagPayloadTreeData(globalTagId, treeIndex) {
                               "type": "module",
                               "description": "",
                               "extraClasses":"yes",
+                              "folder":true,
                               "children" : new Array() };
+          if (invalidStatus) {
+             mytreeEntry.extraClasses = "gtinvalid";
+          }
                treeData[0].children[treeIndex].children[packageIndex].children.push(mytreeEntry);
                moduleIndex = treeData[0].children[treeIndex].children[packageIndex].children.length - 1;
                mytreeEntry = {"title": getRelativePath(payloadTable[i].payloadName),
@@ -264,6 +279,9 @@ function getGlobaltagPayloadTreeData(globalTagId, treeIndex) {
                               "description": "",
                               "selected": payloadTable[i].hasGlobalTag,
                               "extraClasses":"answer"};
+          if (invalidStatus) {
+             mytreeEntry.extraClasses = "gtinvalid";
+          }
                treeData[0].children[treeIndex].children[packageIndex].children[moduleIndex].children.push(mytreeEntry);
            }
       } else {
@@ -275,7 +293,11 @@ function getGlobaltagPayloadTreeData(globalTagId, treeIndex) {
                               "type": "package",
                               "description": "",
                               "extraClasses":"yes",
+                              "folder":true,
                               "children" : new Array() };
+          if (invalidStatus) {
+             mytreeEntry.extraClasses = "gtinvalid";
+          }
               treeData[0].children[treeIndex].children.push(mytreeEntry);
               packageIndex = treeData[0].children[treeIndex].children.length - 1;
               prevModule = payloadTable[i].moduleName.toLowerCase();
@@ -285,7 +307,11 @@ function getGlobaltagPayloadTreeData(globalTagId, treeIndex) {
                               "type": "module",
                               "description": "",
                               "extraClasses":"yes",
+                              "folder":true,
                               "children" : new Array() };
+          if (invalidStatus) {
+             mytreeEntry.extraClasses = "gtinvalid";
+          }
               treeData[0].children[treeIndex].children[packageIndex].children.push(mytreeEntry);
               moduleIndex = treeData[0].children[treeIndex].children[packageIndex].children.length -1;
               console.log("\t"+ prevModule);
@@ -297,6 +323,9 @@ function getGlobaltagPayloadTreeData(globalTagId, treeIndex) {
                               "description": "",
                               "selected": payloadTable[i].hasGlobalTag,
                               "extraClasses":"answer"};
+          if (invalidStatus) {
+             mytreeEntry.extraClasses = "gtinvalid";
+          }
               treeData[0].children[treeIndex].children[packageIndex].children[moduleIndex].children.push(mytreeEntry);
       }
    }
@@ -366,6 +395,7 @@ function getPayloadTreeData () {
                               "type": "module",
                               "description": "",
                               "extraClasses":"yes",
+                              "folder":true,
                               "children" : new Array() };
                mytree[0].children[packageIndex].children.push(mytreeEntry);
                moduleIndex = mytree[0].children[packageIndex].children.length - 1;
@@ -387,6 +417,7 @@ function getPayloadTreeData () {
                               "type": "package",
                               "description": "",
                               "extraClasses":"yes",
+                              "folder":true,
                               "children" : new Array() };
               mytree[0].children.push(mytreeEntry);
               packageIndex = mytree[0].children.length - 1;
@@ -396,6 +427,7 @@ function getPayloadTreeData () {
                               "dbid" : payloadTable[i].payloadId,
                               "type": "module",
                               "description": "",
+                              "folder": true,
                               "extraClasses":"yes",
                               "children" : new Array() };
               mytree[0].children[packageIndex].children.push(mytreeEntry);
@@ -513,25 +545,54 @@ function getGlobalTagTreeData() {
        ).responseText
     );
     var gtid_prefix = "globaltag_";
+    var gtStatusIcon;
+    var invalidStatus;
+
     for (var i = 0; i < gt.length; i++) {
+
+     if (gt[i].globalTagStatus.name.toUpperCase() === "INVALID") {
+        gtStatusIcon = "gtinvalid";
+     }
+     else if (gt[i].globalTagStatus.name.toUpperCase() === "NEW") {
+        gtStatusIcon = "gtnew";
+     }
+     else if (gt[i].globalTagStatus.name.toUpperCase() === "PUBLISHED") {
+        gtStatusIcon = "gtpublish";
+     } else {
+        gtStatusIcon = "NONE";
+     }
+
        payloads = getPayloads(gt[i].globalTagId);
        if (payloads.length > 0 ) {
+          if (gtStatusIcon === "NONE") {
+             gtStatusIcon = "yes";
+          }
           mytreeEntry = {"title":gt[i].name, 
                    "id":gtid_prefix + gt[i].globalTagId,
                    "dbid":gt[i].globalTagId,
                    "type":"globaltag",
                    "description":"",
-                   "extraClasses":"yes",
+                   "extraClasses":gtStatusIcon,
+                   "folder": true,
                    "children":new Array()};
           treeData[0].children.push(mytreeEntry);
-          getGlobaltagPayloadTreeData(gt[i].globalTagId,i);
+          if (gtStatusIcon === "gtinvalid") {
+             invalidStatus = true;
+          } else {
+             invalidStatus = false;
+          }
+          getGlobaltagPayloadTreeData(gt[i].globalTagId,i,gt[i].name, invalidStatus);
        } else {
+          if (gtStatusIcon === "NONE") {
+             gtStatusIcon = "answer";
+          }
           mytreeEntry = {"title":gt[i].name, 
                    "id":gtid_prefix + gt[i].globalTagId,
                    "dbid":gt[i].globalTagId,
                    "type":"globaltag",
                    "description":"",
-                   "extraClasses":"answer"};
+                   "folder":true,
+                   "extraClasses":gtStatusIcon};
            treeData[0].children.push(mytreeEntry);
        }
     }
@@ -616,6 +677,24 @@ function retrieveGlobalTagDump(globaltagId) {
    return globaltag;
 }
 
+
+function retrieveGlobalTagNameDump(globaltagName) {
+// get Global Tag based on global tag name 
+//
+
+   var globaltag = new Object();
+    var globaltag = $.parseJSON(
+    $.ajax(
+        {
+           url: server + "/globalTag/" + globaltagName,
+           async: false,
+           dataType: 'json'
+        }
+       ).responseText
+    );
+   return globaltag;
+}
+
 function dumpPropertyStrings(objectProps)
 {
    var results;
@@ -690,6 +769,8 @@ function dumpGlobalTag(globalTagId) {
   globaltag = retrieveGlobalTagDump(globalTagId);
   //result = JSON.stringify(globaltag);
   result = dumpPropertyStrings(globaltag); 
+  result = result +  "\n\nStatus:" + dumpPropertyStrings(globaltag.globalTagStatus); 
+  result = result +  "\n\nType:" + dumpPropertyStrings(globaltag.globalTagType); 
   return result;
 }
 
@@ -700,23 +781,53 @@ $(function(){
                  selectMode: 1,
                  checkbox: false,
                  autoScroll: true,
+                 extensions: ["filter"],
+                 quicksearch: true,
+                 filter: {
+                    mode: "hide",
+                    autoApply: "true",
+                    leavesOnly: "true",
+                    autoExpand: "true"
+                 },
                 focus: function(event, data) {
                     //logEvent(event, data);
                     selectedNode.nodeId = data.node.data.dbid;
+                    $("#context-menu2").html(window.nofunction_context_menu_tmpl);
                     selectedNode.nodeType = data.node.data.type;
                     selectedNode.nodeTitle = data.node.title;
                     if (appCurrentActivity === appActivityTypes[0]) { 
                        read_right_textarea();
                        if (selectedNode.nodeType === "globaltag") {
-                            var gttmp = retrieveGlobalTagDump(selectedNode.nodeId);
-                            document.getElementById('textarea_detail').value = dumpGlobalTag(selectedNode.nodeId);
-                            // Create a Timeline
-                           var timeline = new Object();
-                           timeline = getGlobaltagPayloads(gttmp.name);
+                           document.getElementById('textarea_detail').value = dumpGlobalTag(selectedNode.nodeId);
+                           var gttmp = retrieveGlobalTagDump(selectedNode.nodeId);
+                           if (gttmp.globalTagStatus.name.toUpperCase() === "PUBLISHED") {
+                              $("#context-menu2").html(window.read_published_global_tag_context_menu_tmpl);
+                              $("#mainmenu_globaltag").html(window.read_published_global_tag_main_menu_tmpl);
+                           } else if (gttmp.globalTagStatus.name.toUpperCase() === "NEW") {
+                              $("#context-menu2").html(window.read_new_global_tag_context_menu_tmpl);
+                              $("#mainmenu_globaltag").html(window.read_new_global_tag_main_menu_tmpl);
+                           } else {
+                              $("#context-menu2").html(window.read_invalid_global_tag_context_menu_tmpl);
+                              $("#mainmenu_globaltag").html(window.read_invalid_global_tag_main_menu_tmpl);
+                           }
                        } else if (selectedNode.nodeType === "payload" ) {
                             document.getElementById('textarea_detail').value = dumpPayload(selectedNode.nodeId);
                        } else if (selectedNode.nodeType === "module" ) {
-                            document.getElementById('textarea_detail').value = dumpModule(selectedNode.nodeId);
+                            var tmpModuleDump;
+                            var tmpGlobalTagName;
+                            var idTokens;
+                            var timeline;
+                            var tmpPayload;
+                            var idTokens = new Array();
+                            tmpModuleDump = new Object();
+                            timeline = new Object();
+                            tmpModuleDump = dumpModule(selectedNode.nodeId);
+                            document.getElementById('textarea_detail').value = tmpModuleDump;
+                            idTokens = data.node.data.id.split('...');
+                            tmpGlobalTagName = idTokens[0];
+                            tmpPayload = retrievePayloadDump(selectedNode.nodeId); 
+                            timeline = getGlobaltagPayloads(tmpGlobalTagName, tmpPayload.basf2Module.name );
+                          
                        } else if (selectedNode.nodeType === "package" ) {
                             document.getElementById('textarea_detail').value = dumpPackage(selectedNode.nodeId);
                        } else {
@@ -725,6 +836,7 @@ $(function(){
                     } else if (appCurrentActivity === appActivityTypes[2]) {
                          if (selectedNode.nodeType === "payload")  {
                              $('#input_payloadname').val(selectedNode.nodeTitle);
+                             $('#input_payloadid').val(data.node.data.dbid);
                          }
                     }
                     // document.getElementById('textarea_detail').value =  
@@ -776,4 +888,3 @@ $(function(){
       }
     });
 });
-
