@@ -1,0 +1,6 @@
+  ul.fancytree-container {
+    width: 350px;
+    height: 600px;
+    overflow: auto;
+    position: relative;
+  } 
