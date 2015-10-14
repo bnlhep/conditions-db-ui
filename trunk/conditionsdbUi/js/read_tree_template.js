@@ -70,7 +70,7 @@ function getGlobalTagPayloadRecords(globalTagId, globalTagName) {
    var buildSortKey;
    var payloadList = new Object();
    var buildString = "[";
- 
+
    results = new Object();
 //EGS MAY BE OBSOLETE payloadsAssignedToGlobalTag(1);
 
@@ -139,7 +139,7 @@ function getAllPayloadRecords() {
    var buildSortKey;
    var payloadList = new Object();
    var buildString = "[";
- 
+
    results = new Object();
 //EGS MAY BE OBSOLETE payloadsAssignedToGlobalTag(1);
 
@@ -175,7 +175,7 @@ function getAllPayloadRecords() {
                 + '","payloadId": "'
                 + payloadList[i].payloadId
 //EGS THIS MAY BE OBSOLETE
-                + '","hasGlobalTag":false' 
+                + '","hasGlobalTag":false'
 //EGS THIS MAY BE OBSOLETE                 + '","hasGlobalTag":' +  isPayloadAssignedToGlobalTag(payloadList[i].payloadId)
                 + ' }';
       if (i < (payloadList.length-1)) {
@@ -204,10 +204,10 @@ function getRelativePath (name) {
     results = "";
     tokens = name.split("/");
     results = tokens[tokens.length-1];
-    return results; 
+    return results;
 }
 
-function getGlobaltagPayloadTreeData(globalTagId, treeIndex, globalTagName, invalidStatus) {
+function getGlobaltagPayloadTreeData(globalTagId, globalTagName, gtStatus) {
 
    var payloadTable = new Object();
    var prevPackage;
@@ -218,19 +218,33 @@ function getGlobaltagPayloadTreeData(globalTagId, treeIndex, globalTagName, inva
    var packageIndex;
    var moduleIndex;
    var mytreeEntry;
+   var mysubtreeEntryl
+   var invalidStatus
+   mysubtreeEntry  = new Object();
    mytreeEntry  = new Object();
+   var subtreeData  = new Array();
    addedParentTag = false;
    payloadTable = getGlobalTagPayloadRecords(globalTagId, globalTagName);
    prevPackage = "";
    prevModule = "";
    packageIndex = 0;
-   moduleIndex = 0;
+   moduleIndex = 0;   
+   mysubtreeEntry = {"title": "<strong>" + uxTree[1].title + "</strong>",
+                    "expanded": true,
+                    "folder": true,
+                    "children": new Array()};
+    subtreeData.push(mysubtreeEntry);
+   if (gtStatus === "gtinvalid") {
+             invalidStatus = true;
+          } else {
+             invalidStatus = false;
+          }
    for (var i = 0; i < payloadTable.length; i++) {
       currPackage = payloadTable[i].packageName.toLowerCase();
       currModule = payloadTable[i].moduleName.toLowerCase();
       if ((currPackage == prevPackage) && (currModule == prevModule)) {
           console.log("\t\t"+ payloadTable[i].payloadName);
-          mytreeEntry = {"title": getRelativePath(payloadTable[i].payloadName),
+          mytreeEntry = {"title": getRelativePath(payloadTable[i].payloadName),							 
                               "id": payloadTable[i].recordId,
                               "dbid" : payloadTable[i].payloadId,
                               "type": "payload",
@@ -240,11 +254,11 @@ function getGlobaltagPayloadTreeData(globalTagId, treeIndex, globalTagName, inva
           if (invalidStatus) {
              mytreeEntry.extraClasses = "gtinvalid";
           }
-          treeData[0].children[treeIndex].children[packageIndex].children[moduleIndex].children.push(mytreeEntry);
+          subtreeData[0].children[packageIndex].children[moduleIndex].children.push(mytreeEntry);
       } else if (currPackage == prevPackage)  {
            if (currModule == prevModule) {
                console.log("\t\t"+ payloadTable[i].payloadName);
-               mytreeEntry = {"title": getRelativePath(payloadTable[i].payloadName),
+               mytreeEntry = {"title": getRelativePath(payloadTable[i].payloadName),							  
                               "selected": payloadTable[i].hasGlobalTag,
                               "id": payloadTable[i].recordId,
                               "dbid" : payloadTable[i].payloadId,
@@ -254,12 +268,12 @@ function getGlobaltagPayloadTreeData(globalTagId, treeIndex, globalTagName, inva
           if (invalidStatus) {
              mytreeEntry.extraClasses = "gtinvalid";
           }
-               treeData[0].children[treeIndex].children[packageIndex].children[moduleIndex].children.push(mytreeEntry);
+               subtreeData[0].children[packageIndex].children[moduleIndex].children.push(mytreeEntry);
            } else {
                prevModule = payloadTable[i].moduleName.toLowerCase();
                console.log("\t"+ prevModule);
                console.log("\t\t"+ payloadTable[i].payloadName);
-               mytreeEntry = {"title": prevModule,
+               mytreeEntry = {"title": prevModule,							  
                               "id": payloadTable[i].recordId,
                               "dbid" : payloadTable[i].payloadId,
                               "type": "module",
@@ -270,9 +284,9 @@ function getGlobaltagPayloadTreeData(globalTagId, treeIndex, globalTagName, inva
           if (invalidStatus) {
              mytreeEntry.extraClasses = "gtinvalid";
           }
-               treeData[0].children[treeIndex].children[packageIndex].children.push(mytreeEntry);
-               moduleIndex = treeData[0].children[treeIndex].children[packageIndex].children.length - 1;
-               mytreeEntry = {"title": getRelativePath(payloadTable[i].payloadName),
+               subtreeData[0].children[packageIndex].children.push(mytreeEntry);
+               moduleIndex = subtreeData[0].children[packageIndex].children.length - 1;
+               mytreeEntry = {"title": getRelativePath(payloadTable[i].payloadName),							  
                               "id": payloadTable[i].recordId,
                               "dbid" : payloadTable[i].payloadId,
                               "type": "payload",
@@ -282,12 +296,12 @@ function getGlobaltagPayloadTreeData(globalTagId, treeIndex, globalTagName, inva
           if (invalidStatus) {
              mytreeEntry.extraClasses = "gtinvalid";
           }
-               treeData[0].children[treeIndex].children[packageIndex].children[moduleIndex].children.push(mytreeEntry);
+               subtreeData[0].children[packageIndex].children[moduleIndex].children.push(mytreeEntry);
            }
       } else {
               prevPackage = payloadTable[i].packageName.toLowerCase();
               console.log(prevPackage);
-              mytreeEntry = {"title": prevPackage,
+              mytreeEntry = {"title": prevPackage,							 
                               "id": payloadTable[i].recordId,
                               "dbid" : payloadTable[i].payloadId,
                               "type": "package",
@@ -298,10 +312,10 @@ function getGlobaltagPayloadTreeData(globalTagId, treeIndex, globalTagName, inva
           if (invalidStatus) {
              mytreeEntry.extraClasses = "gtinvalid";
           }
-              treeData[0].children[treeIndex].children.push(mytreeEntry);
-              packageIndex = treeData[0].children[treeIndex].children.length - 1;
+              subtreeData[0].children.push(mytreeEntry);
+              packageIndex = subtreeData[0].children.length - 1;
               prevModule = payloadTable[i].moduleName.toLowerCase();
-              mytreeEntry = {"title": prevModule,
+              mytreeEntry = {"title": prevModule,							  
                               "id": payloadTable[i].recordId,
                               "dbid" : payloadTable[i].payloadId,
                               "type": "module",
@@ -312,11 +326,11 @@ function getGlobaltagPayloadTreeData(globalTagId, treeIndex, globalTagName, inva
           if (invalidStatus) {
              mytreeEntry.extraClasses = "gtinvalid";
           }
-              treeData[0].children[treeIndex].children[packageIndex].children.push(mytreeEntry);
-              moduleIndex = treeData[0].children[treeIndex].children[packageIndex].children.length -1;
+              subtreeData[0].children[packageIndex].children.push(mytreeEntry);
+              moduleIndex = subtreeData[0].children[packageIndex].children.length -1;
               console.log("\t"+ prevModule);
               console.log("\t\t"+ payloadTable[i].payloadName);
-              mytreeEntry = {"title": getRelativePath(payloadTable[i].payloadName),
+              mytreeEntry = {"title": getRelativePath(payloadTable[i].payloadName),							  
                               "id": payloadTable[i].recordId,
                               "dbid" : payloadTable[i].payloadId,
                               "type": "payload",
@@ -326,11 +340,12 @@ function getGlobaltagPayloadTreeData(globalTagId, treeIndex, globalTagName, inva
           if (invalidStatus) {
              mytreeEntry.extraClasses = "gtinvalid";
           }
-              treeData[0].children[treeIndex].children[packageIndex].children[moduleIndex].children.push(mytreeEntry);
+              subtreeData[0].children[packageIndex].children[moduleIndex].children.push(mytreeEntry);
       }
    }
 //EGS THIS MAY BE OBSOLETE  treeString = treeString + treeStringClose;
    //console.log(treeString);
+      return subtreeData[0].children;
 }
 
 
@@ -347,10 +362,10 @@ function getPayloadTreeData () {
    var addedParentTag;
    var packageIndex;
    var moduleIndex;
-   
+
    var mytree = new Array();
-   mytreeEntry = {"title": "<strong>" + uxTree[1].title + "</strong>", 
-                    "expanded": true, 
+   mytreeEntry = {"title": "<strong>" + uxTree[1].title + "</strong>",
+                    "expanded": true,
                     "folder": true,
                     "children": new Array()};
     mytree.push(mytreeEntry);
@@ -475,28 +490,28 @@ function getPayloads(index) {
     var payload = $.parseJSON(
     $.ajax(
         {
-           url: server + "/globalTag/" + index + "/payloads", 
-           async: false, 
+           url: server + "/globalTag/" + index + "/payloads",
+           async: false,
            dataType: 'json'
         }
        ).responseText
-    ); 
+    );
    var payloadid_prefix = "payload_";
    for (var p=0; p < payload.length; p++) {
           if (p == 0) {
              payloads = '[';
           }
-          payloads = payloads 
-       + '{"title": "' 
+          payloads = payloads
+       + '{"title": "'
        + payload[p].basf2Module.basf2Package.name
-       + '-' 
-       + payload[p].basf2Module.name  
-       + '-' 
+       + '-'
+       + payload[p].basf2Module.name
+       + '-'
        + payload[p].payloadId
-       + '", "id": "' 
-       + payloadid_prefix 
-       + index 
-       + '", "dbid": "' + payload[p].payloadId 
+       + '", "id": "'
+       + payloadid_prefix
+       + index
+       + '", "dbid": "' + payload[p].payloadId
        + '", "type": "payload" '
        + ', "description": "" '
        + ', "extraClasses": "answer"}';
@@ -505,8 +520,8 @@ function getPayloads(index) {
              break;
           }
           payloads = payloads + ',';
-   }     
- 
+   }
+
    return payloads;
 }
 
@@ -562,18 +577,21 @@ function getGlobalTagTreeData() {
         gtStatusIcon = "NONE";
      }
 
-       payloads = getPayloads(gt[i].globalTagId);
-       if (payloads.length > 0 ) {
+      // payloads = getPayloads(gt[i].globalTagId);
+	  payloadsCnt = gt[i].payloadCount;
+      // if (payloads.length > 0 ) {
+		 if (payloadsCnt > 0 ) {
           if (gtStatusIcon === "NONE") {
              gtStatusIcon = "yes";
           }
-          mytreeEntry = {"title":gt[i].name, 
+          mytreeEntry = {"title":gt[i].name,
                    "id":gtid_prefix + gt[i].globalTagId,
                    "dbid":gt[i].globalTagId,
                    "type":"globaltag",
                    "description":"",
                    "extraClasses":gtStatusIcon,
                    "folder": true,
+				   "lazy": true,
                    "children":new Array()};
           treeData[0].children.push(mytreeEntry);
           if (gtStatusIcon === "gtinvalid") {
@@ -581,12 +599,12 @@ function getGlobalTagTreeData() {
           } else {
              invalidStatus = false;
           }
-          getGlobaltagPayloadTreeData(gt[i].globalTagId,i,gt[i].name, invalidStatus);
+       	//getGlobaltagPayloadTreeData(gt[i].globalTagId,i,gt[i].name, invalidStatus);
        } else {
           if (gtStatusIcon === "NONE") {
              gtStatusIcon = "answer";
           }
-          mytreeEntry = {"title":gt[i].name, 
+          mytreeEntry = {"title":gt[i].name,
                    "id":gtid_prefix + gt[i].globalTagId,
                    "dbid":gt[i].globalTagId,
                    "type":"globaltag",
@@ -596,26 +614,27 @@ function getGlobalTagTreeData() {
            treeData[0].children.push(mytreeEntry);
        }
     }
+
 //EGS THIS MAY BE OBSOLETE            treeString = treeString + '{"title": "'
-//EGS THIS MAY BE OBSOLETE                         + gt[i].name 
+//EGS THIS MAY BE OBSOLETE                         + gt[i].name
 //EGS THIS MAY BE OBSOLETE                         + '", "id": "'
 //EGS THIS MAY BE OBSOLETE                         + gtid_prefix
-//EGS THIS MAY BE OBSOLETE                         + gt[i].globalTagId 
+//EGS THIS MAY BE OBSOLETE                         + gt[i].globalTagId
 //EGS THIS MAY BE OBSOLETE                         + '", "dbid": "'
-//EGS THIS MAY BE OBSOLETE                         + gt[i].globalTagId 
+//EGS THIS MAY BE OBSOLETE                         + gt[i].globalTagId
 //EGS THIS MAY BE OBSOLETE                         + '", "type": "globaltag" '
 //EGS THIS MAY BE OBSOLETE                         + ', "description": "" '
 //EGS THIS MAY BE OBSOLETE                         + ', "extraClasses": "yes", "children":';
 //EGS THIS MAY BE OBSOLETE               treeString = treeString + payloads ;
 //EGS THIS MAY BE OBSOLETE        } else {
 //EGS THIS MAY BE OBSOLETE               treeString = treeString
-//EGS THIS MAY BE OBSOLETE                         + '{"title": "' 
-//EGS THIS MAY BE OBSOLETE                         + gt[i].name 
-//EGS THIS MAY BE OBSOLETE                         + '", "id": "' 
+//EGS THIS MAY BE OBSOLETE                         + '{"title": "'
+//EGS THIS MAY BE OBSOLETE                         + gt[i].name
+//EGS THIS MAY BE OBSOLETE                         + '", "id": "'
 //EGS THIS MAY BE OBSOLETE                         + gtid_prefix
-//EGS THIS MAY BE OBSOLETE                         + gt[i].globalTagId 
+//EGS THIS MAY BE OBSOLETE                         + gt[i].globalTagId
 //EGS THIS MAY BE OBSOLETE                         + '", "dbid": "'
-//EGS THIS MAY BE OBSOLETE                         + gt[i].globalTagId 
+//EGS THIS MAY BE OBSOLETE                         + gt[i].globalTagId
 //EGS THIS MAY BE OBSOLETE                         + '", "type": "globaltag" '
 //EGS THIS MAY BE OBSOLETE                         + ', "description": "" '
 //EGS THIS MAY BE OBSOLETE                         + ', "extraClasses": "answer"}';
@@ -679,7 +698,7 @@ function retrieveGlobalTagDump(globaltagId) {
 
 
 function retrieveGlobalTagNameDump(globaltagName) {
-// get Global Tag based on global tag name 
+// get Global Tag based on global tag name
 //
 
    var globaltag = new Object();
@@ -738,9 +757,9 @@ function dumpPayload(payloadId) {
   result = "";
   payload = retrievePayloadDump(payloadId);
   //result = JSON.stringify(payload);
-  result = dumpPropertyStrings(payload); 
-  result = result +  "\n\nStatus:" + dumpPropertyStrings(payload.payloadStatus); 
-  result = result +  "\n\nInterval of Validity:" + dumpPropertyStrings(payload.payloadIov); 
+  result = dumpPropertyStrings(payload);
+  result = result +  "\n\nStatus:" + dumpPropertyStrings(payload.payloadStatus);
+  result = result +  "\n\nInterval of Validity:" + dumpPropertyStrings(payload.payloadIov);
   return result;
 }
 
@@ -749,7 +768,7 @@ function dumpModule(payloadId) {
   var payload;
   result = "";
   payload = retrievePayloadDump(payloadId);
-  result = dumpPropertyStrings(payload.basf2Module); 
+  result = dumpPropertyStrings(payload.basf2Module);
   return result;
 }
 
@@ -758,7 +777,7 @@ function dumpPackage(payloadId) {
   var payload;
   result = "";
   payload = retrievePayloadDump(payloadId);
-  result = dumpPropertyStrings(payload.basf2Module.basf2Package); 
+  result = dumpPropertyStrings(payload.basf2Module.basf2Package);
   return result;
 }
 
@@ -768,9 +787,9 @@ function dumpGlobalTag(globalTagId) {
   result = ""
   globaltag = retrieveGlobalTagDump(globalTagId);
   //result = JSON.stringify(globaltag);
-  result = dumpPropertyStrings(globaltag); 
-  result = result +  "\n\nStatus:" + dumpPropertyStrings(globaltag.globalTagStatus); 
-  result = result +  "\n\nType:" + dumpPropertyStrings(globaltag.globalTagType); 
+  result = dumpPropertyStrings(globaltag);
+  result = result +  "\n\nStatus:" + dumpPropertyStrings(globaltag.globalTagStatus);
+  result = result +  "\n\nType:" + dumpPropertyStrings(globaltag.globalTagType);
   return result;
 }
 
@@ -795,7 +814,7 @@ $(function(){
                     $("#context-menu2").html(window.nofunction_context_menu_tmpl);
                     selectedNode.nodeType = data.node.data.type;
                     selectedNode.nodeTitle = data.node.title;
-                    if (appCurrentActivity === appActivityTypes[0]) { 
+                    if (appCurrentActivity === appActivityTypes[0]) {
                        read_right_textarea();
                        if (selectedNode.nodeType === "globaltag") {
                            document.getElementById('textarea_detail').value = dumpGlobalTag(selectedNode.nodeId);
@@ -825,9 +844,9 @@ $(function(){
                             document.getElementById('textarea_detail').value = tmpModuleDump;
                             idTokens = data.node.data.id.split('...');
                             tmpGlobalTagName = idTokens[0];
-                            tmpPayload = retrievePayloadDump(selectedNode.nodeId); 
+                            tmpPayload = retrievePayloadDump(selectedNode.nodeId);
                             timeline = getGlobaltagPayloads(tmpGlobalTagName, tmpPayload.basf2Module.name );
-                          
+
                        } else if (selectedNode.nodeType === "package" ) {
                             document.getElementById('textarea_detail').value = dumpPackage(selectedNode.nodeId);
                        } else {
@@ -839,7 +858,7 @@ $(function(){
                              $('#input_payloadid').val(data.node.data.dbid);
                          }
                     }
-                    // document.getElementById('textarea_detail').value =  
+                    // document.getElementById('textarea_detail').value =
                     //         "id " + selectedNode.nodeId + "\n type " + selectedNode.nodeType + "\n title " + selectedNode.nodeTitle;
                  //   $("#echoFocused").text(data.node.title);
                  },
@@ -856,10 +875,10 @@ $(function(){
                          } else {
                             var s = parentnode.title;
                             if (s.indexOf("Global Tag") > -1)  {
-                                     read_global_tag_details();                            
+                                     read_global_tag_details();
                                      var gtid =  nodes[0].data.id;
                                      var tokens = gtid.split('_');
-                                     var gt_db_id = tokens[1]; 
+                                     var gt_db_id = tokens[1];
                                      getval(gt_db_id);
                              } else {
                                      console.log("This is not a global tag");
@@ -867,7 +886,10 @@ $(function(){
                              }
                          }
                      }
-                  }
+                  },
+				  lazyLoad: function(event, data) {
+					  data.result = getGlobaltagPayloadTreeData(data.node.data.dbid, data.node.title, data.node.extraClasses);
+				  }
 	});
      $("#tree").contextmenu({
       delegate: "span.fancytree-title",
