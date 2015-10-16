@@ -112,6 +112,7 @@ function set_edit_global_tag_tmpl (types, globalId) {
       alert ("Failure modifying global tag");
     } else {
       alert ("Success:  " + errorMsg);
+      clear_right_template();
       $('#frm_edit_global_tag' ).each(function(){ this.reset(); }); getTreeData();
       $("#tree").fancytree("getTree").reload(treeData).done(function(){ });
     }
