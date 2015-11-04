@@ -1,7 +1,7 @@
 function set_global_tag_tmpl (types) {  
- create_global_tag_tmpl =  '   <form data-toggle="validator" role="form"  id="frm_create_global_tag" > '
-  +  '   <div class="panel panel-default"> '
-  +  '   <div class="panel-heading">Create Global Tag</div> '
+ create_global_tag_tmpl =  '   <form data-toggle="validator" role="form"  id="frm_create_global_tag"> '
+  +  '   <div class="panel panel-default" style="height:100%" > '
+  +  '   <div class="panel-heading"  style="font-weight: bold">Create Global Tag</div> '
   +  '   <div class="panel-body" > '
   + ' <div class="form-group"> '
   +  '<label id="label_gtname" for="input_gtname" valign="top" class="control-label">Name:</label> '

@@ -4,7 +4,7 @@ function set_edit_global_tag_tmpl (types, globalId) {
 
 
  edit_global_tag_tmpl =  '   <form role = "form" id="frm_edit_global_tag" > '
-      +  '   <div class="panel panel-default"> '
+      +  '   <div class="panel panel-default" style="height:100%"> '
       +  '   <div class="panel-heading">Edit Global Tag</div> '
       +  '   <div class="panel-body" > '
       + ' <div class="form-group"> '

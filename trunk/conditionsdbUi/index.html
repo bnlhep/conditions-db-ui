@@ -42,8 +42,8 @@
 
 <style type="text/css">
 ul.fancytree-container {
-  width: 700px;
-  height: 300px;
+  width: auto;
+  height: auto;
   overflow: auto;
   position: relative;
   outline:none !important;
@@ -531,12 +531,12 @@ function switch_payload_tree () {
 <!-- Top Menu Bar -->
 <!--              -->
 
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse" style="padding-top:10px">
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" >Conditions Database</a>
     </div>
-    <div id="mainmenu_globaltag" name="mainmenu_globaltag" > 
+    <div id="mainmenu_globaltag" name="mainmenu_globaltag" >
       <ul class="nav navbar-nav"   >
         <li class="dropdown"  ><a class="dropdown-toggle" data-toggle="dropdown" >Global Tags <span class="caret"></span></a>
           <ul class="dropdown-menu"  >
@@ -546,45 +546,36 @@ function switch_payload_tree () {
       </li>
     </ul>
     </div>
+    </div>
 </nav>
 
 <!--                        -->
 <!-- Row Content Container -->
 <!--                        -->
-  
+
 
 
 <!--                        -->
 <!-- Left Content Container -->
 <!--                        -->
+<div>
+    <div  class="panel panel-default"  id="left" style="float:left; width:35%; height:85%; overflow: scroll; overflow-x: hidden; padding-left:5px; padding-right:5px; padding-top: 5px; padding-bottom: 5px">
+	    	<div class="panel-heading" style="font-weight: bold">Browse</div>
+	    	<div class="panel-body">
+	    		<div id="tree"></div>
+	    	</div>
+    </div>
 
-    <div class="col-md-6"  id="left" >
-      <table> 
-         <tr> 
-            <td> 
-                 <label for="treelabel" >Browse<label> 
-            </td> 
-         </tr> 
-         <tr>  
-            <td>  
-                 <div id="tree"></div>  
-            </td> 
-          </tr> 
-       </table> 
-    </div> 
 
 
 <!--                         -->
 <!-- Right Content Container -->
 <!--                         -->
 
-    <div class="col-md-6" id="right" >
+    <div class="panel panel-default" id="right" style="float:right; width:65%; height:85%; overflow: scroll; overflow-x: hidden; padding-left:5px; padding-right:5px; padding-top: 5px; padding-bottom: 5px;">
     </div>
 
-
-
-
-
+</div>
         <div id="context-menu2" name="context-menu2" >
           <ul class="dropdown-menu" role="menu">
           </ul>
@@ -594,7 +585,7 @@ function switch_payload_tree () {
 <!-- Bottom Menu            -->
 <!--                        -->
 
-<div class="navbar navbar-default navbar-fixed-bottom">
+<div class="navbar navbar-default navbar-fixed-bottom" style="padding-top:5px; padding-bottom:5px;">
   <div class="container">
 <!--    <span class="navbar-text">  -->
 <div class="row">

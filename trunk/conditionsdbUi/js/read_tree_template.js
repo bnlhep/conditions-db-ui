@@ -720,18 +720,22 @@ function dumpPropertyStrings(objectProps)
    results = "";
    for (var key in objectProps) {
         if (typeof(objectProps[key]) == "undefined") {
-            results = results + "\n" + key + "=undefined";
+            // insert a space before all caps
+            //.replace(/([A-Z])/g, ' $1')
+            // uppercase the first character
+            //.replace(/^./, function(str){ return str.toUpperCase(); })
+            results = results + "\n" + key.replace(/([A-Z])/g, ' $1').replace(/^./, function(str){ return str.toUpperCase(); }) + " = undefined";
             console.log("The type of " + key + " is undefined");
         }
         else if (typeof(objectProps[key]) == "string") {
             console.log("The type of " + key + " is string");
-            results = results + "\n" + key + "=" + objectProps[key];
+            results = results + "\n" + key.replace(/([A-Z])/g, ' $1').replace(/^./, function(str){ return str.toUpperCase(); }) + " = " + objectProps[key];
             //console.log("The type of " + typeof(key));
-            console.log(key + "=" + objectProps[key]);
+            console.log(key + " = " + objectProps[key]);
         }
         else if (typeof(objectProps[key]) == "boolean") {
             console.log("The type of " + key + " is boolean");
-            results = results + "\n" + key + "=" + objectProps[key];
+            results = results + "\n" + key.replace(/([A-Z])/g, ' $1').replace(/^./, function(str){ return str.toUpperCase(); }) + " = " + objectProps[key];
         }
         else if (typeof(objectProps[key]) == "object") {
             console.log("The type of " + key + " is object");
@@ -741,7 +745,7 @@ function dumpPropertyStrings(objectProps)
                 console.log("The type of " + key + " is not an array");
             }
         } else if (typeof(objectProps[key]) == "number") {
-           results = results + "\n" + key + "=" + objectProps[key];
+           results = results + "\n" + key.replace(/([A-Z])/g, ' $1').replace(/^./, function(str){ return str.toUpperCase(); }) + " = " + objectProps[key];
            console.log("The type of " + key + " is number");
         }
         else {
