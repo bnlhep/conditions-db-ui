@@ -57,15 +57,15 @@ $(function() {
         target: '#context-menu2',
         onItem: function(e, item) {
           if ($(item).text() === "Create Global Tag") {
-              appCurrentActivity = appActivityTypes[1];
+              
               create_global_tag () ;
           } 
           else if ($(item).text() === "Clone Global Tag") {
-              appCurrentActivity = appActivityTypes[0];
+              
               clone_global_tag () ;
           }
           else if ($(item).text() === "Edit Global Tag") {
-              appCurrentActivity = appActivityTypes[3];
+              
               edit_global_tag () ;
           }
           else if ($(item).text() === "Add Payloads") {
@@ -73,15 +73,15 @@ $(function() {
               read_right_textarea();
           }
           else if ($(item).text() === "Publish Global Tag") {
-              appCurrentActivity = appActivityTypes[0];
+             
               publish_global_tag();
           }
           else if ($(item).text() === "Validate Global Tag") {
-              appCurrentActivity = appActivityTypes[0];
+              
               validate_global_tag();
           }
           else if ($(item).text() === "Invalidate Global Tag") {
-              appCurrentActivity = appActivityTypes[0];
+             
               invalidate_global_tag();
           }
           else if ($(item).text() === "Switch Treeview") {
@@ -377,6 +377,7 @@ function read_global_tag_tree () {
 }
 
 function publish_global_tag () {
+appCurrentActivity = appActivityTypes[0];
 bootbox.confirm("Are you sure you want to publish?", function(result) {
   if (result == true) {
      alert ("Publish" + selectedNode.nodeId); 
@@ -390,6 +391,7 @@ bootbox.confirm("Are you sure you want to publish?", function(result) {
 }
  
 function validate_global_tag () {
+appCurrentActivity = appActivityTypes[0];
 bootbox.confirm("Are you sure you want to make the global tag valid?", function(result) {
   if (result == true) {
      alert ("Validate");
@@ -404,6 +406,7 @@ bootbox.confirm("Are you sure you want to make the global tag valid?", function(
 }
 
 function invalidate_global_tag () {
+appCurrentActivity = appActivityTypes[0];
 bootbox.confirm("Are you sure you want to make the global tag invalid?", function(result) {
   if (result == true) {
      alert ("Invalidate"); 
@@ -417,12 +420,14 @@ bootbox.confirm("Are you sure you want to make the global tag invalid?", functio
 }); 
 }
 function create_global_tag () {
+   appCurrentActivity = appActivityTypes[1];
    set_global_tag_tmpl(get_gt_types());
    $("#right").html(window.create_global_tag_tmpl);
 }
 
 
 function edit_global_tag() {
+   appCurrentActivity = appActivityTypes[3];
    if (window.selectedNode.nodeType === "globaltag") {
       set_edit_global_tag_tmpl(get_gt_types(), selectedNode.nodeId);
       $("#right").html(window.edit_global_tag_tmpl);
@@ -434,6 +439,7 @@ function edit_global_tag() {
 }
  
 function clone_global_tag () {
+   appCurrentActivity = appActivityTypes[0];
    if (window.selectedNode.nodeType === "globaltag") {
       //  alert(selectedNode.nodeId);
         window.clone_global_tag_operation(selectedNode.nodeId);
@@ -445,6 +451,7 @@ function clone_global_tag () {
 }
 
 function create_globaltag_iov () {
+   appCurrentActivity = appActivityTypes[2];
    if (window.selectedNode.nodeType === "globaltag") {
       appCurrentActivity = appActivityTypes[2];
       switch_payload_tree();
