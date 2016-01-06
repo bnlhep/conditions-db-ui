@@ -1,1 +1,0 @@
-config :rfore_resources, :required => [:sproutcore], :load_fixtures => true
