@@ -1,1 +1,0 @@
-config :rfore_d3, :required => [:sproutcore]
